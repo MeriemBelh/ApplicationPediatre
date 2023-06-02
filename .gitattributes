@@ -1,0 +1,4 @@
+AppPediatre/static/**/*.css -text
+AppPediatre/static/**/*.js -text
+AppPediatre/static/**/*.svg -text
+AppPediatre/static/**/*.html -text
