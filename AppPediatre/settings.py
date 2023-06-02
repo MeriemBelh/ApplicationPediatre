@@ -95,8 +95,18 @@ WSGI_APPLICATION = 'AppPediatre.wsgi.application'
 # }
 
 DATABASES = {
-    'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'dbpediatre',
+        'USER': 'dbpediatre_user',
+        'PASSWORD': '2d9PmVfcgX6pfwMHmO8Sa77fdKDb2vYM',
+        'HOST': 'dpg-chruj0grddl7atfg00c0-a.oregon-postgres.render.com',
+        'PORT': '',
+    }
 }
+
+db_from_env = dj_database_url.config(default=os.environ.get('DATABASE_URL'))
+DATABASES['default'].update(db_from_env)
 
 db_from_env = dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 DATABASES['default'].update(db_from_env)
