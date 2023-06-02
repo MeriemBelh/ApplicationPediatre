@@ -11,9 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
 from pathlib import Path
-import django_heroku
 import dj_database_url
-from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -85,30 +83,23 @@ WSGI_APPLICATION = 'AppPediatre.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dbpediatre',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
+#         'ENGINE': 'django.db.backends.mysql',
 #         'NAME': 'dbpediatre',
-#         'USER': 'dbpediatre_user',
-#         'PASSWORD': '2d9PmVfcgX6pfwMHmO8Sa77fdKDb2vYM',
-#         'HOST': 'dpg-chruj0grddl7atfg00c0-a.oregon-postgres.render.com',
-#         'PORT': '',
+#         'USER': 'root',
+#         'PASSWORD': 'root',
+#         'HOST': 'localhost',
+#         'PORT': '3306',
 #     }
 # }
-#
-# db_from_env = dj_database_url.config(default=os.environ.get('DATABASE_URL'))
-# DATABASES['default'].update(db_from_env)
+
+DATABASES = {
+    'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
+}
+
+db_from_env = dj_database_url.config(default=os.environ.get('DATABASE_URL'))
+DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -152,4 +143,3 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-django_heroku.settings(locals())
