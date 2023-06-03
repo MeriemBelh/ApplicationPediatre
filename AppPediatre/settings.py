@@ -102,6 +102,9 @@ DATABASES = {
         'PASSWORD': '2d9PmVfcgX6pfwMHmO8Sa77fdKDb2vYM',
         'HOST': 'dpg-chruj0grddl7atfg00c0-a.oregon-postgres.render.com',
         'PORT': '',
+        'OPTIONS': {
+            'charset': 'utf8',
+        }
     }
 }
 
