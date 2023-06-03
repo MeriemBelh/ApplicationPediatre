@@ -4,7 +4,7 @@ from . import views
 urlpatterns = [
     # gestion session
     path('', views.index_admin, name="index_admin"),
-    path('nouveau-administrateur/', views.new_admin, name='new_admin'),
+    #path('nouveau-administrateur/', views.new_admin, name='new_admin'),
     path('logout-administrateur/', views.logout_admin, name='logout_admin'),
     # path('login_administrateur/', views.connexion_administrateur, name='connexion_administrateur'),
 
