@@ -102,10 +102,12 @@ DATABASES = {
         'PASSWORD': '2d9PmVfcgX6pfwMHmO8Sa77fdKDb2vYM',
         'HOST': 'dpg-chruj0grddl7atfg00c0-a.oregon-postgres.render.com',
         'PORT': '',
-        'OPTIONS': {
-            'charset': 'utf8',
-        }
     }
+}
+
+DATABASES['default']['OPTIONS'] = {
+    'options': '-c search_path=public',
+    'sslmode': 'require',
 }
 
 db_from_env = dj_database_url.config(default=os.environ.get('DATABASE_URL'))
