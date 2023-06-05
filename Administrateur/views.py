@@ -1,3 +1,4 @@
+import json
 import os
 
 from django.contrib.auth import authenticate, login, logout
@@ -16,7 +17,253 @@ from AppPediatre.views import *
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
-#=================Messagerie======================
+
+
+# ==================== Pediatre========================
+def desactiver_pediatre(request, pediatre):
+    if request.user.is_authenticated:
+        error = ""
+        errorValue = False
+        try:
+            user = User.objects.get(username=pediatre)
+            pediatreUser = Pediatre.objects.get(user=user)
+            user.is_active = False
+            user.save()
+            pediatreUser.save()
+            return redirect('gestion_pediatre')
+        except BaseException as e:
+            errorMessage = str(e)
+            errorValue = True
+            print(str(e))
+            return redirect('homPage')
+    else:
+        return redirect('homPage')
+
+
+def activer_pediatre(request, pediatre):
+    if request.user.is_authenticated:
+        error = ""
+        errorValue = False
+        try:
+            user = User.objects.get(username=pediatre)
+            pediatreUser = Pediatre.objects.get(user=user)
+            user.is_active = True
+            user.save()
+            pediatreUser.save()
+            return redirect('gestion_pediatre')
+        except BaseException as e:
+            errorMessage = str(e)
+            errorValue = True
+            print(str(e))
+            return redirect('homPage')
+    else:
+        return redirect('homPage')
+
+
+def supprimer_pediatre(request, pediatre):
+    if request.user.is_authenticated:
+        error = ""
+        errorValue = False
+        try:
+            user = User.objects.get(username=pediatre)
+            user.delete()
+            # Redirect
+            return redirect('gestion_pediatre')
+        except BaseException as e:
+            errorMessage = str(e)
+            errorValue = True
+            print(str(e))
+            return redirect('homPage')
+    else:
+        return redirect('homPage')
+
+
+def editer_pediatre(request, pediatre):
+    if request.user.is_authenticated:
+        error = ""
+        errorValue = False
+        user = User.objects.get(username=pediatre)
+        pediatreUser = Pediatre.objects.get(user=user)
+        # ---------------------------------Pour le get Methode-----------------
+
+        context = {
+            'cniPediatre': pediatreUser.cniPediatre,
+            'inpe': pediatreUser.inpe,
+            'prenomPediatre': pediatreUser.prenomPediatre,
+            'nomPediatre': pediatreUser.nomPediatre,
+            'mailPediatre': pediatreUser.mailPediatre,
+            'numTelephonePediatre': pediatreUser.numTelephonePediatre,
+            'adressePediatre': pediatreUser.adressePediatre,
+            'hopitalPediatre': pediatreUser.hopitalPediatre,
+            'passwordPediatre': pediatreUser.passwordPediatre,
+            'pediatreUser': pediatreUser,
+        }
+        # --------------Post method----------------------
+        if request.method == "POST":
+            cniPediatre = request.POST.get('cniPediatre')
+            prenomPediatre = request.POST.get('prenomPediatre')
+            nomPediatre = request.POST.get('nomPediatre')
+            mailPediatre = request.POST.get('mailPediatre')
+            numTelephonePediatre = request.POST.get('numTelephonePediatre')
+            adressePediatre = request.POST.get('adressePediatre')
+            hopitalPediatre = request.POST.get('hopitalPediatre')
+            passwordPediatre = request.POST.get('passwordPediatre')
+
+            user = User.objects.get(username=pediatre)
+            pediatreUser = Pediatre.objects.get(user=user)
+
+            # Changement de mot de passe:
+            if passwordPediatre != pediatreUser.passwordPediatre:
+                user.set_password(passwordPediatre)
+
+            user.first_name = prenomPediatre
+            user.last_name = nomPediatre
+            user.email = mailPediatre
+            user.save()
+
+            pediatreUser.cniPediatre = cniPediatre
+            pediatreUser.prenomPediatre = prenomPediatre
+            pediatreUser.nomPediatre = nomPediatre
+            pediatreUser.mailPediatre = mailPediatre
+            pediatreUser.numTelephonePediatre = numTelephonePediatre
+            pediatreUser.adressePediatre = adressePediatre
+            pediatreUser.hopitalPediatre = hopitalPediatre
+            pediatreUser.save()
+
+            url = reverse('afficher_pediatre', args=[pediatre])
+            return redirect(url)
+
+        return render(request, 'Administrateur/editer_pediatre.html', context)
+    else:
+        return redirect('homPage')
+
+
+def recherche_pediatre(request):
+    if request.user.is_authenticated:
+        error = ""
+        errorValue = False
+        context = {}
+
+        try:
+            pediatre_bd = Pediatre.objects.all()
+        except BaseException as e:
+            error = str(e)
+            errorValue = True
+        else:
+            # --------------Post method----------------------
+            if request.method == "POST":
+                nom = request.POST.get('nom')
+                inpe = request.POST.get('inpe')
+                hopital = request.POST.get('hopital')
+
+                query = Q()
+                if nom:
+                    query &= (Q(nomPediatre__icontains=nom) | Q(prenomPediatre__icontains=nom))
+                if inpe:
+                    query &= Q(inpe__icontains=inpe)
+                if hopital:
+                    query &= Q(hopitalPediatre__icontains=hopital)
+
+                pediatre_bd = Pediatre.objects.filter(query)
+
+                context = {
+                    'error': error,
+                    'errorValue': errorValue,
+                    'pediatres': pediatre_bd,
+                }
+
+        return render(request, "Administrateur/recherchePediatres.html", context)
+    else:
+        return redirect('homPage')
+
+
+def gestion_pediatre(request):
+    if request.user.is_authenticated:
+        error = ""
+        errorValue = False
+        context = {}
+
+        try:
+            pediatre_bd = Pediatre.objects.all()
+        except BaseException as e:
+            error = str(e)
+            errorValue = True
+        else:
+            context = {
+                'error': error,
+                'errorValue': errorValue,
+                'pediatres': pediatre_bd,
+            }
+        return render(request, "Administrateur/pediatreListe_admin.html", context)
+    else:
+        return redirect('homPage')
+
+
+def ajouter_pediatre(request):
+    if request.user.is_authenticated:
+        error = ""
+        errorValue = False
+        context = {}
+        # --------------Post method----------------------
+        if request.method == "POST":
+            cniPediatre = request.POST.get('cniPediatre')
+            inpe = request.POST.get('inpe')
+            prenomPediatre = request.POST.get('prenomPediatre')
+            nomPediatre = request.POST.get('nomPediatre')
+            mailPediatre = request.POST.get('mailPediatre')
+            numTelephonePediatre = request.POST.get('numTelephonePediatre')
+            adressePediatre = request.POST.get('adressePediatre')
+            hopitalPediatre = request.POST.get('hopitalPediatre')
+
+            # Craetion d'une instance User
+            user = User.objects.create_user(username=inpe,
+                                            first_name=prenomPediatre,
+                                            last_name=nomPediatre,
+                                            email=mailPediatre,
+                                            is_pediatre=True)
+            user.set_password(cniPediatre)
+            if user:
+                user.save()
+                pediatreUser = Pediatre(user=user, inpe=inpe, nomPediatre=nomPediatre, prenomPediatre=prenomPediatre,
+                                        cniPediatre=cniPediatre,
+                                        mailPediatre=mailPediatre,
+                                        numTelephonePediatre=numTelephonePediatre,
+                                        adressePediatre=adressePediatre,
+                                        hopitalPediatre=hopitalPediatre)
+                if pediatreUser:
+                    pediatreUser.save()
+                    url = reverse('afficher_pediatre', args=[inpe])
+                    return redirect(url)
+                else:
+                    user.delete()
+                    return redirect('gestion_pediatre')
+
+        return render(request, 'Administrateur/ajouter_pediatre.html', context)
+    else:
+        return redirect('homPage')
+
+
+def afficher_pediatre(request, pediatre):
+    if request.user.is_authenticated:
+        error = ""
+        errorValue = False
+        try:
+            user = User.objects.get(username=pediatre)
+            pediatreUser = Pediatre.objects.get(user=user)
+            context = {
+                'pediatre': pediatreUser,
+            }
+            return render(request, "Administrateur/afficher_pediatre.html", context)
+        except BaseException as e:
+            errorMessage = str(e)
+            errorValue = True
+            print(str(e))
+            return redirect('homPage')
+    else:
+        return redirect('homPage')
+
+
+# =================Messagerie======================
 def conversation_admin(request, conversation_id):
     if request.user.is_authenticated:
         boite_reception = []
@@ -77,6 +324,7 @@ def conversation_admin(request, conversation_id):
     else:
         return redirect('homPage')
 
+
 def chatAdmin(request):
     if request.user.is_authenticated:
         boite_reception = []
@@ -88,17 +336,17 @@ def chatAdmin(request):
 
             for c in conversations:
                 try:
-                    #Conter le nbr des msgs qui sont vu par l'utilisateur pour cette conversation
+                    # Conter le nbr des msgs qui sont vu par l'utilisateur pour cette conversation
                     message_vu = Message.objects.filter(conversation=c, vu=False, receiver=request.user)
-                    #Conter le nbr des messages qui ne sont pas vu par l'user
+                    # Conter le nbr des messages qui ne sont pas vu par l'user
                     nbrVu = len(message_vu)
-                    #Si aucun msg n'est vu je vais pas ajouter un style css
+                    # Si aucun msg n'est vu je vais pas ajouter un style css
                     if nbrVu == 0:
                         msg_is_vu = True
                     else:
                         msg_is_vu = False
 
-                    #Prendre le dernier message d'une conversation
+                    # Prendre le dernier message d'une conversation
                     message = Message.objects.filter(conversation=c).latest('dateEnvoie')
                     last_message = message.message
                     if len(last_message) > 112:
@@ -126,10 +374,12 @@ def chatAdmin(request):
             return render(request, 'Administrateur/chatAdmin.html', context)
     else:
         return redirect('homPage')
-#----------------------------------------------------Admin--------------------------------------
-#-----------------------------------------------------------------------------------------------
-#----------------------------------------------------------------------------------------------
-#------------------------------------------------------------------------------------------------
+
+
+# ----------------------------------------------------Admin--------------------------------------
+# -----------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------
 
 def desactiver_admin(request, admin):
     if request.user.is_authenticated:
@@ -150,6 +400,7 @@ def desactiver_admin(request, admin):
     else:
         return redirect('homPage')
 
+
 def activer_admin(request, admin):
     if request.user.is_authenticated:
         error = ""
@@ -169,6 +420,7 @@ def activer_admin(request, admin):
     else:
         return redirect('homPage')
 
+
 def supprimer_admin(request, admin):
     if request.user.is_authenticated:
         error = ""
@@ -186,6 +438,7 @@ def supprimer_admin(request, admin):
     else:
         return redirect('homPage')
 
+
 def editer_admin(request, admin):
     if request.user.is_authenticated:
         error = ""
@@ -196,11 +449,11 @@ def editer_admin(request, admin):
 
         context = {
             'nomAdmin': administrateur.nomAdmin,
-            'prenomAdmin':administrateur.prenomAdmin,
+            'prenomAdmin': administrateur.prenomAdmin,
             'passwordAdmin': administrateur.passwordAdmin,
-            'mailAdmin':administrateur.mailAdmin,
-            'admin':administrateur,
-            'username':user.username,
+            'mailAdmin': administrateur.mailAdmin,
+            'admin': administrateur,
+            'username': user.username,
         }
         # --------------Post method----------------------
         if request.method == "POST":
@@ -223,13 +476,11 @@ def editer_admin(request, admin):
             user.username = usernameAdmin
             user.save()
 
-
             administrateur.nomAdmin = nomAdmin
             administrateur.prenomAdmin = prenomAdmin
             administrateur.passwordAdmin = passwordAdmin
             administrateur.mailAdmin = mailAdmin
             administrateur.save()
-
 
             url = reverse('afficher_administrateur', args=[admin])
             return redirect(url)
@@ -237,6 +488,7 @@ def editer_admin(request, admin):
         return render(request, 'Administrateur/editer_admin.html', context)
     else:
         return redirect('homPage')
+
 
 def recherche_administrateur(request):
     if request.user.is_authenticated:
@@ -274,6 +526,7 @@ def recherche_administrateur(request):
     else:
         return redirect('homPage')
 
+
 def gestion_administrateurs(request):
     if request.user.is_authenticated:
         error = ""
@@ -295,6 +548,7 @@ def gestion_administrateurs(request):
         return render(request, "Administrateur/administrateursListe_admin.html", context)
     else:
         return redirect('homPage')
+
 
 def ajouter_administrateur(request):
     if request.user.is_authenticated:
@@ -335,6 +589,7 @@ def ajouter_administrateur(request):
     else:
         return redirect('homPage')
 
+
 def afficher_administrateur(request, admin):
     if request.user.is_authenticated:
         error = ""
@@ -354,10 +609,11 @@ def afficher_administrateur(request, admin):
     else:
         return redirect('homPage')
 
-#============================================Statistiques============================
-#------------------------------------------------------------------------------------------------
-#------------------------------------------------------------------------------------------------
-#------------------------------------------------------------------------------------------------
+
+# ============================================Statistiques============================
+# ------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------
 def statistiques(request):
     if request.user.is_authenticated:
         error = ""
@@ -365,6 +621,7 @@ def statistiques(request):
         return render(request, 'Administrateur/statistiquesAdmin.html')
     else:
         return redirect('homPage')
+
 
 def pie_chart_sexe(request):
     patients = Patient.objects.all()
@@ -380,6 +637,7 @@ def pie_chart_sexe(request):
             sexe_counts[sexe] = 1
     data = [{'sexe': sexe, 'count': count} for sexe, count in sexe_counts.items()]
     return JsonResponse(data, safe=False)
+
 
 def pie_chart_region(request):
     patients = Patient.objects.all()
@@ -399,6 +657,7 @@ def pie_chart_region(request):
     data1 = [{'region': region, 'count': count} for region, count in region_counts.items()]
     return JsonResponse(data1, safe=False)
 
+
 def pie_chart_cm(request):
     patients = Patient.objects.all()
     cm_counts = dict()
@@ -413,6 +672,7 @@ def pie_chart_cm(request):
     data2 = [{'cm': cm, 'count': count} for cm, count in cm_counts.items()]
     return JsonResponse(data2, safe=False)
 
+
 def pie_chart_ville(request):
     patients = Patient.objects.all()
 
@@ -425,6 +685,7 @@ def pie_chart_ville(request):
             ville_counts[ville] = 1
     data3 = [{'ville': ville, 'count': count} for ville, count in ville_counts.items()]
     return JsonResponse(data3, safe=False)
+
 
 def pie_chart_pc(request):
     patients = Patient.objects.all()
@@ -441,6 +702,7 @@ def pie_chart_pc(request):
     data4 = [{'pc': pc, 'count': count} for pc, count in pc_counts.items()]
     return JsonResponse(data4, safe=False)
 
+
 def pie_chart_gs(request):
     patients = Patient.objects.all()
     gs_counts = dict()
@@ -455,6 +717,7 @@ def pie_chart_gs(request):
             gs_counts[gs] = 1
     data4 = [{'gs': gs, 'count': count} for gs, count in gs_counts.items()]
     return JsonResponse(data4, safe=False)
+
 
 def pie_chart_tg(request):
     patients = Patient.objects.all()
@@ -471,6 +734,7 @@ def pie_chart_tg(request):
     data4 = [{'tg': tg, 'count': count} for tg, count in tg_counts.items()]
     return JsonResponse(data4, safe=False)
 
+
 def pie_chart_av(request):
     patients = Patient.objects.all()
     av_counts = dict()
@@ -486,6 +750,7 @@ def pie_chart_av(request):
     data4 = [{'av': av, 'count': count} for av, count in av_counts.items()]
     return JsonResponse(data4, safe=False)
 
+
 def pie_chart_sn(request):
     patients = Patient.objects.all()
     sn_counts = dict()
@@ -500,6 +765,7 @@ def pie_chart_sn(request):
             sn_counts[sn] = 1
     data4 = [{'sn': sn, 'count': count} for sn, count in sn_counts.items()]
     return JsonResponse(data4, safe=False)
+
 
 def pie_chart_pn(request):
     patients = Patient.objects.all()
@@ -568,11 +834,12 @@ def pie_chart_rsp(request):
     data4 = [{'rsp': rsp, 'count': count} for rsp, count in rsp_counts.items()]
     return JsonResponse(data4, safe=False)
 
-#----------------------------------------------------Patient--------------------------------------
-#-----------------------------------------------------------------------------------------------
-#----------------------------------------------------------------------------------------------
-#------------------------------------------------------------------------------------------------
-#line chart
+
+# ----------------------------------------------------Patient--------------------------------------
+# -----------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------
+# line chart
 def line_chart_Obesite(request, patient_id):
     # Retrieve patient and obesite data
     patient = Patient.objects.get(idPatient=patient_id)
@@ -587,7 +854,7 @@ def line_chart_Obesite(request, patient_id):
     # Calculate age in months for each obesite point
     for obesite in obesite_data:
         age = (obesite.obesite_date.year - patient.dateNaissancePatient.year) * 12 + (
-                    obesite.obesite_date.month - patient.dateNaissancePatient.month)
+                obesite.obesite_date.month - patient.dateNaissancePatient.month)
         x_axis.append(age)
         y_axis_poids.append(obesite.obesite_poids)
         y_axis_taille.append(obesite.obesite_taille)
@@ -598,12 +865,13 @@ def line_chart_Obesite(request, patient_id):
         'x': 'x',
         'columns': [
             ['x'] + x_axis,
-            ['obesite_poids'] + y_axis_poids,
-            ['obesite_taille'] + y_axis_taille,
-            ['imc'] + y_axis_imc,
+            ['Poids'] + y_axis_poids,
+            ['Taille'] + y_axis_taille,
+            ['Imc'] + y_axis_imc,
         ],
     }
     return JsonResponse(chart_data)
+
 
 # Afficher patient
 def afficher_patient(request, patient_id):
@@ -616,12 +884,55 @@ def afficher_patient(request, patient_id):
             file_name = os.path.basename(userPatient.imgPatient.url)
             img_path = "/imgProfile_patient/" + file_name
 
+            try:
+                data = PatientScolarite.objects.filter(patientID=patient_id).order_by('year_scolarite')
+                chart_data_year = []
+                classes = ['CP', 'CE1', 'CE2', 'CM1', 'CM2', '6ème', '1ère année', '2ème année', '3ème année',
+                           '4ème année', '5ème année']
+                chart_data_class = []
+
+                for entry in data:
+                    year = int(entry.year_scolarite.split('/')[0])
+
+                    if not chart_data_year:  # Check if the list is empty
+                        chart_data_year.append(year)
+                        if entry.level_scolarite in classes:
+                            chart_data_class.append(classes.index(entry.level_scolarite))
+                        else:  # BAC
+                            chart_data_class.append(11)
+                    else:
+                        j = len(chart_data_year) - 1
+                        if year != (chart_data_year[j] + 1):
+                            k = year - chart_data_year[j] - 1
+                            for n in range(k, 0, -1):
+                                chart_data_year.append(year - n)
+                                chart_data_class.append(None)
+                            chart_data_year.append(year)
+                            if entry.level_scolarite in classes:
+                                chart_data_class.append(classes.index(entry.level_scolarite))
+                            else:  # BAC
+                                chart_data_class.append(11)
+                        else:
+                            chart_data_year.append(year)
+                            if entry.level_scolarite in classes:
+                                chart_data_class.append(classes.index(entry.level_scolarite))
+                            else:  # BAC
+                                chart_data_class.append(11)
+
+                chart_data_class_json = json.dumps(chart_data_class)
+                chart_data_year_json = json.dumps(chart_data_year)
+            except BaseException as e:
+                chart_data_class_json = []
+                chart_data_year_json = []
+
             context = {
-                'p':userPatient,
+                'p': userPatient,
                 'img': img_path,
-                'infopatient':infopatient,
+                'infopatient': infopatient,
+                'chart_data_class_json': chart_data_class_json,
+                'chart_data_year_json': chart_data_year_json,
             }
-            return render(request, "Administrateur/afficherPatient_admin.html",context)
+            return render(request, "Administrateur/afficherPatient_admin.html", context)
         except BaseException as e:
             errorMessage = str(e)
             errorValue = True
@@ -629,6 +940,7 @@ def afficher_patient(request, patient_id):
             return redirect('homPage')
     else:
         return redirect('homPage')
+
 
 # Ajouter patient
 def ajouter_patient(request):
@@ -651,7 +963,7 @@ def ajouter_patient(request):
                 'errorValue': errorValue,
                 'delegations': list(delegations),
                 'mutuelles': list(mutuelles),
-                'pediatres':pediatres,
+                'pediatres': pediatres,
             }
         # --------------Post method----------------------
         if request.method == "POST":
@@ -697,13 +1009,14 @@ def ajouter_patient(request):
                     user.save()
 
                     patientUser = Patient(user=user, idPatient=idPatientNew, inpe=pediatre,
-                                          passwordPatient=dateNaissancePatient, nomPatient=nomPatient, prenomPatient=prenomPatient,
+                                          passwordPatient=dateNaissancePatient, nomPatient=nomPatient,
+                                          prenomPatient=prenomPatient,
                                           sexePatient=sexepatient,
                                           dateNaissancePatient=dateNaissancePatient,
                                           mailPatient=mailPatient, adressePatient=adressePatient,
                                           numTelephoneMere=numTelephoneMere,
                                           numTelephonePere=numTelephonePere, villePatient=villePatient,
-                                          delegationPatient=delegationPatient,)
+                                          delegationPatient=delegationPatient, )
                     if patientUser:
                         patientUser.save()
 
@@ -720,7 +1033,7 @@ def ajouter_patient(request):
                             imgPatientName = fs.save(f'{idPatientNew}.{image_extention}', imgPatient)
                             imgPatientAdresse = '/' + imgPatientName
 
-                            patientUser.imgPatient=imgPatientAdresse
+                            patientUser.imgPatient = imgPatientAdresse
 
                         patientUser.save()
 
@@ -736,7 +1049,7 @@ def ajouter_patient(request):
                                                       Notion_hospitalisation_age_neonatal=Notion_hospitalisation_age_neonatal,
                                                       allaitement=allaitement,
                                                       diversification_alimentaire=diversification_alimentaire,
-                                                      retentissement_staturo_ponderale=retentissement_staturo_ponderale,)
+                                                      retentissement_staturo_ponderale=retentissement_staturo_ponderale, )
                         if infoPatientUser:
                             infoPatientUser.save()
 
@@ -748,6 +1061,7 @@ def ajouter_patient(request):
         return render(request, 'Administrateur/ajouter_patient.html', context)
     else:
         return redirect('homPage')
+
 
 # Supprimer patient
 def supprimer_patient(request, patient_id):
@@ -781,6 +1095,7 @@ def supprimer_patient(request, patient_id):
     else:
         return redirect('homPage')
 
+
 # Desactiver patient
 def desactiver_patient(request, patient_id):
     if request.user.is_authenticated:
@@ -799,6 +1114,7 @@ def desactiver_patient(request, patient_id):
     else:
         return redirect('homPage')
 
+
 # Activer patient
 def activer_patient(request, patient_id):
     if request.user.is_authenticated:
@@ -816,6 +1132,7 @@ def activer_patient(request, patient_id):
             return redirect('homPage')
     else:
         return redirect('homPage')
+
 
 # Gestion patients
 def gestion_patients(request):
@@ -843,6 +1160,7 @@ def gestion_patients(request):
         return render(request, "Administrateur/patientsListe_admin.html", context)
     else:
         return redirect('homPage')
+
 
 # Editer patient
 def editer_patient(request, patient_id):
@@ -1017,6 +1335,7 @@ def editer_patient(request, patient_id):
     else:
         return redirect('homPage')
 
+
 def recherche_patient(request):
     if request.user.is_authenticated:
         error = ""
@@ -1066,6 +1385,7 @@ def recherche_patient(request):
     else:
         return redirect('homPage')
 
+
 # Creation Admin
 def new_admin(request):
     if request.method == "POST":
@@ -1101,6 +1421,7 @@ def new_admin(request):
         context = {"form": formCreation, "error": error}
     return render(request, "Administrateur/newAdmin.html", context=context)
 
+
 # Index Admin
 def index_admin(request):
     if request.user.is_authenticated:
@@ -1112,7 +1433,7 @@ def index_admin(request):
 
         # Nbr des attributes
         try:
-            specialistesNbr = User.objects.filter(is_pediatre=True).count()
+            specialistesNbr = Pediatre.objects.all().count()
         except User.DoesNotExist:
             specialistesNbr = 0
         else:
@@ -1126,8 +1447,8 @@ def index_admin(request):
                 errorMsg = str(e)
         # Les patients et les pediatres
         try:
-            recent_patients = User.objects.filter(is_patient=True).order_by('date_joined')[:20]
-            recent_pediatres = User.objects.filter(is_pediatre=True).order_by('date_joined')[:20]
+            recent_patients = Patient.objects.all()
+            recent_pediatres = Pediatre.objects.all()
         except BaseException as e:
             error = True
             errorMsg = errorMsg + str(e)
@@ -1137,18 +1458,20 @@ def index_admin(request):
             try:
                 patients = []
                 pediatres = []
-                for p in recent_patients:
-                    patient = Patient.objects.get(user=p)
-                    file_name = os.path.basename(patient.imgPatient.url)
-                    img_path = "/imgProfile_patient/" + file_name
-                    patients.append([patient, img_path])
 
                 for p in recent_pediatres:
-                    pediatre = Pediatre.objects.get(user=p)
-                    pediatres.append(pediatre)
+                    pediatres.append(p)
+
+                for p in recent_patients:
+                    file_name = os.path.basename(p.imgPatient.url)
+                    img_path = "/imgProfile_patient/" + file_name
+                    patients.append([p, img_path])
+
+
             except BaseException as e:
                 error = True
                 errorMsg = errorMsg + str(e)
+                print(e)
 
         context = {
             'error': error,
@@ -1164,6 +1487,7 @@ def index_admin(request):
     else:
         return redirect('homPage')
 
+
 # Deconnexion
 def logout_admin(request):
     if request.user.is_authenticated:
@@ -1177,11 +1501,13 @@ def logout_admin(request):
     else:
         return redirect('homPage')
 
+
 # Gestion d'administrateur
 def gestion_admin(request):
     adminList = Administrateur.objects.all()
     context = {"adminList": adminList}
     return render(request, "Administrateur/gestionAdmin.html", context=context)
+
 
 def delegationCities_ajax(request):
     selectedValue = request.GET.get('selectedValue', '')
@@ -1306,7 +1632,6 @@ def afficherActualite(request):
         return redirect('homPage')
 
 
-
 def ajouterActualite(request):
     if request.user.is_authenticated:
         if request.method == "POST":
@@ -1321,7 +1646,6 @@ def ajouterActualite(request):
             return render(request, "Administrateur/news/add_news.html", {"form": form})
     else:
         return redirect('homPage')
-
 
 
 def supprimerActualite(request, actualite_id):
@@ -1348,5 +1672,29 @@ def modifierActualite(request, actualite_id):
             form = ActualiteForm(instance=actualite)
 
         return render(request, "Administrateur/news/edit_news.html", {"form": form})
+    else:
+        return redirect('homPage')
+
+
+def siteParams(request):
+    if request.user.is_authenticated:
+        contact_info = ContactInformation.objects.first()
+        if request.method == "POST":
+            phone_number = request.POST.get("phone_number")
+            email_address = request.POST.get("email_address")
+            if contact_info:
+                contact_info.phone_number = phone_number
+                contact_info.email_address = email_address
+                contact_info.save()
+            else:
+                ContactInformation.objects.create(phone_number=phone_number, email_address=email_address)
+            return render(request, "Administrateur/paramSite.html", {
+                "success_message": "Contact information updated successfully.",
+                "contact_info": contact_info,
+            })
+        else:
+            return render(request, "Administrateur/paramSite.html", {
+                "contact_info": contact_info,
+            })
     else:
         return redirect('homPage')

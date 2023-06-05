@@ -64,3 +64,8 @@ class Actualite(models.Model):
 class Image(models.Model):
     image_id = models.AutoField(primary_key=True)
     image = models.ImageField(upload_to="imgGalerie/")
+
+
+class ContactInformation(models.Model):
+    phone_number = models.CharField(max_length=20)
+    email_address = models.EmailField()

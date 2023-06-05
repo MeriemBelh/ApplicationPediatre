@@ -4,9 +4,19 @@ from . import views
 urlpatterns = [
     # gestion session
     path('', views.index_admin, name="index_admin"),
-    #path('nouveau-administrateur/', views.new_admin, name='new_admin'),
+    # path('nouveau-administrateur/', views.new_admin, name='new_admin'),
     path('logout-administrateur/', views.logout_admin, name='logout_admin'),
     # path('login_administrateur/', views.connexion_administrateur, name='connexion_administrateur'),
+
+    # Gestion pediatre
+    path('gestion_pediatre/', views.gestion_pediatre, name='gestion_pediatre'),
+    path('recherche_pediatre/', views.recherche_pediatre, name='recherche_pediatre'),
+    path('ajouter_pediatre/', views.ajouter_pediatre, name='ajouter_pediatre'),
+    path('desactiver_pediatre/<str:pediatre>/', views.desactiver_pediatre, name='desactiver_pediatre'),
+    path('activer_pediatre/<str:pediatre>/', views.activer_pediatre, name='activer_pediatre'),
+    path('supprimer_pediatre/<str:pediatre>/', views.supprimer_pediatre, name='supprimer_pediatre'),
+    path('editer_pediatre/<str:pediatre>/', views.editer_pediatre, name='editer_pediatre'),
+    path('afficher_pediatre/<str:pediatre>/', views.afficher_pediatre, name='afficher_pediatre'),
 
     # Gestion admin
     path('gestion_administrateurs/', views.gestion_administrateurs, name='gestion_administrateurs'),
@@ -32,7 +42,6 @@ urlpatterns = [
     path('activer_patient/<int:patient_id>/', views.activer_patient, name='activer_patient'),
     path('afficher_patient/<int:patient_id>/', views.afficher_patient, name='afficher_patient'),
     path('line_chart_Obesite/<int:patient_id>/', views.line_chart_Obesite, name='line_chart_Obesite'),
-
     path('delegationCities_ajax/', views.delegationCities_ajax, name='delegationCities_ajax'),
 
     # Statistiques
@@ -67,5 +76,9 @@ urlpatterns = [
     path('ajout_actualite/', views.ajouterActualite, name='ajout_actualite'),
     path('supprimer_actualite/<int:actualite_id>/', views.supprimerActualite, name='supprimer_actualite'),
     path('modifer_actualite/<int:actualite_id>/', views.modifierActualite, name='modifer_actualite'),
+
+    # parametres
+
+    path('parametres/', views.siteParams, name='parametres')
 
 ]

@@ -7,6 +7,7 @@ from Patient.models import *
 from Pediatre.models import *
 from Patient.views import *
 from Pediatre.views import *
+from Administrateur.models import *
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -20,13 +21,24 @@ def index(request):
         else:
             return redirect('index_admin')
     else:
+        contact_info = ContactInformation.objects.first()
         actualite = Actualite.objects.order_by('-post_date')[:8]
-        return render(request, "homePage.html", {'actualite': actualite})
+        context = {
+        'actualite': actualite,
+        "contact_info": contact_info,
+        }
+
+        return render(request, "homePage.html", context)
 
 
 def loginUsers(request):
     error = ""
     errorValue = False
+    contact_info = ContactInformation.objects.first()
+    context = {
+        "contact_info": contact_info,
+        'error': error, 'errorValue': errorValue,
+    }
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -53,10 +65,12 @@ def loginUsers(request):
             else:
                 error = 'L\'identifiant ou le mot de passe que vous avez saisi n’est pas associé à un compte admin!'
                 errorValue = True
-    return render(request, 'loginUsers.html', {'error': error, 'errorValue': errorValue})
+
+    return render(request, 'loginUsers.html', context)
 
 
 def image(request):
+    contact_info = ContactInformation.objects.first()
     if request.user.is_authenticated:
         try:
             patient = Patient.objects.get(user=request.user)
@@ -68,6 +82,7 @@ def image(request):
         img = Image.objects.all()
 
         context = {
+            "contact_info": contact_info,
             'patient': patient,
             'imgPatient': img_path,
             "img": img,
@@ -75,10 +90,11 @@ def image(request):
         return render(request, "image.html", context)
     else:
         img = Image.objects.all()
-        return render(request, "image.html", {"img": img})
+        return render(request, "image.html", {"img": img,"contact_info": contact_info})
 
 
 def video(request):
+    contact_info = ContactInformation.objects.first()
     if request.user.is_authenticated:
         try:
             patient = Patient.objects.get(user=request.user)
@@ -92,18 +108,21 @@ def video(request):
             'patient': patient,
             'imgPatient': img_path,
             "video": video_,
+            "contact_info": contact_info,
         }
         return render(request, "video.html", context)
     else:
         video_ = Video.objects.all()
-        return render(request, "video.html",{"video": video_})
+        return render(request, "video.html",{"video": video_,"contact_info": contact_info})
 
 
 def about(request):
-    return render(request, "about.html")
+    contact_info = ContactInformation.objects.first()
+    return render(request, "about.html",{"contact_info": contact_info})
 
 
 def actualites(request):
+    contact_info = ContactInformation.objects.first()
     if request.user.is_authenticated:
         try:
             patient = Patient.objects.get(user=request.user)
@@ -118,13 +137,32 @@ def actualites(request):
             'patient': patient,
             'imgPatient': img_path,
             "actualite": actualite,
+            "contact_info": contact_info,
         }
         return render(request, "actualites.html", context)
     else:
         actualite = Actualite.objects.all()
-        return render(request, "actualites.html",{"actualite": actualite})
+        return render(request, "actualites.html",{"actualite": actualite,"contact_info": contact_info})
 
 
 def actualite(request, actualite_id):
-    actualite = get_object_or_404(Actualite, actualite_id=actualite_id)
-    return render(request, "actualite.html",{"actualite": actualite})
+    contact_info = ContactInformation.objects.first()
+    if request.user.is_authenticated:
+        try:
+            patient = Patient.objects.get(user=request.user)
+        except Exception as e:
+            patient = None
+            print('Exception: ', e)
+        file_name = os.path.basename(patient.imgPatient.url)
+        img_path = "/imgProfile_patient/" + file_name
+        actualite = get_object_or_404(Actualite, actualite_id=actualite_id)
+        context = {
+            'patient': patient,
+            'imgPatient': img_path,
+            "actualite": actualite,
+            "contact_info": contact_info,
+        }
+        return render(request, "actualite.html", context)
+    else:
+        actualite = get_object_or_404(Actualite, actualite_id=actualite_id)
+        return render(request, "actualite.html",{"actualite": actualite,"contact_info": contact_info})

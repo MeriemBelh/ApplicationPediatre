@@ -14,6 +14,14 @@
     <link rel="stylesheet" href="{% static 'plugins/fontawesome/css/fontawesome.min.css' %}">
     <link rel="stylesheet" href="{% static 'plugins/fontawesome/css/all.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/Admin/style.css' %}">
+<!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css">-->
+<!--    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>-->
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">-->
+<!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>-->
+<!--    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
     {% block import %}{% endblock %}
     {% block styleCss %}{% endblock %}
 </head>
@@ -29,19 +37,16 @@
             <a href="#" class="white-logo">
                 <img src="{% static 'images/default-user-image-admin.jpg' %}" alt="Logo">
             </a>
-            <a href="#" class="logo logo-small">
-                <img src="{% static 'images/default-user-image-admin.jpg' %}" alt="Logo" width="30" height="30">
-            </a>
         </div>
         <a href="javascript:void(0);" id="toggle_btn">
             <i class="fas fa-bars"></i>
         </a>
-        <div class="top-nav-search">
-            <form>
-                <input type="text" class="form-control" placeholder="Recherche...">
-                <button class="btn" type="submit"><i class="fas fa-search"></i></button>
-            </form>
-        </div>
+<!--        <div class="top-nav-search">-->
+<!--            <form>-->
+<!--                <input type="text" class="form-control" placeholder="Recherche...">-->
+<!--                <button class="btn" type="submit"><i class="fas fa-search"></i></button>-->
+<!--            </form>-->
+<!--        </div>-->
         <a class="mobile_btn" id="mobile_btn">
             <i class="fas fa-bars"></i>
         </a>
@@ -66,20 +71,21 @@
         <div class="sidebar-inner slimscroll">
             <div id="sidebar-menu" class="sidebar-menu">
                 {% block sideBar %}
-                <ul>
+                    <ul>
                         <li class="menu-title"><span>Menu</span></li>
                         <li class="active">
                             <a><i data-feather="home"></i> <span>tableau de bord</span></a>
                         </li>
                         <li>
-                            <a href="{% url 'statistiques' %}"><i data-feather="pie-chart"></i> <span> Statistiques</span> </a>
+                            <a href="{% url 'statistiques' %}"><i data-feather="pie-chart"></i>
+                                <span> Statistiques</span> </a>
                         </li>
                         <li>
-                        <a href="#"><i data-feather="bell"></i> <span>Actualités</span><span
-                                class="menu-arrow"></span></a>
+                            <a href="#"><i data-feather="bell"></i> <span>Actualités</span><span
+                                    class="menu-arrow"></span></a>
                             <ul>
                                 <li><a href="{% url 'affichage_actualite' %}">Toutes les actualités</a></li>
-                                <li><a href="">Ajouter une actualité</a></li>
+                                <li><a href="{% url 'ajout_actualite' %}">Ajouter une actualité</a></li>
                             </ul>
                         </li>
                         <li>
@@ -93,13 +99,8 @@
                             <a href="{% url 'gestion_patients' %}"><i data-feather="users"></i>
                                 <span>Patients</span></a>
                         </li>
-                        <li class="submenu">
-                            <a href="#"><i data-feather="clipboard"></i> <span> Spécialistes</span> <span
-                                    class="menu-arrow"></span></a>
-                            <ul>
-                                <li><a href="">Pediatre</a></li>
-                                <li><a href="">Dentiste</a></li>
-                            </ul>
+                        <li>
+                            <a href="{% url 'gestion_pediatre' %}"><i data-feather="clipboard"></i><span>Pédiatres</span></a>
                         </li>
 
 
@@ -107,29 +108,26 @@
                             <span>Gestion media</span>
                         </li>
                         <li>
-                        <a href="#"><i data-feather="video"></i> <span>Videos</span><span
-                                class="menu-arrow"></span></a>
-                        <ul>
-                            <li><a href="{% url 'affichage_video' %}">Toutes les videos</a></li>
-                            <li><a href="{% url 'ajout_video' %}">Ajouter une video</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#"><i data-feather="image"></i> <span>Images</span><span
-                                class="menu-arrow"></span></a>
-                        <ul>
-                            <li><a href="{% url 'affichage_image' %}">Toutes les images</a></li>
-                            <li><a href="{% url 'ajout_image' %}">Ajouter une image</a></li>
-                        </ul>
-                    </li>
+                            <a href="#"><i data-feather="video"></i> <span>Videos</span><span
+                                    class="menu-arrow"></span></a>
+                            <ul>
+                                <li><a href="{% url 'affichage_video' %}">Toutes les videos</a></li>
+                                <li><a href="{% url 'ajout_video' %}">Ajouter une video</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i data-feather="image"></i> <span>Images</span><span
+                                    class="menu-arrow"></span></a>
+                            <ul>
+                                <li><a href="{% url 'affichage_image' %}">Toutes les images</a></li>
+                                <li><a href="{% url 'ajout_image' %}">Ajouter une image</a></li>
+                            </ul>
+                        </li>
                         <li class="menu-title">
-                            <span>Réglages</span>
+                            <span>Autre</span>
                         </li>
                         <li>
-                            <a href="profile.html"><i data-feather="user-plus"></i> <span>Profile</span></a>
-                        </li>
-                        <li>
-                            <a href="settings.html"><i data-feather="settings"></i> <span>Paramètres</span></a>
+                            <a href="{% url 'parametres' %}"><i data-feather="phone"></i> <span>Contact</span></a>
                         </li>
                     </ul>
                 {% endblock %}

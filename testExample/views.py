@@ -1,7 +1,63 @@
+import json
+
 from django.http import JsonResponse
 from django.shortcuts import render
 from Patient.models import *
+from collections import defaultdict
 
+def chart_view(request):
+    # Retrieve the data from models
+    data = PatientScolarite.objects.filter(patientID=14584).order_by('year_scolarite')
+    chart_data_year = []
+    classes = ['CP', 'CE1', 'CE2', 'CM1', 'CM2', '6ème', '1ère année', '2ème année', '3ème année', '4ème année',
+               '5ème année']
+    chart_data_class = []
+
+    for entry in data:
+        year = int(entry.year_scolarite.split('/')[0])
+
+        if not chart_data_year:  # Check if the list is empty
+            chart_data_year.append(year)
+            #print(str(entry.level_scolarite)+" "+str(classes.index(entry.level_scolarite)))
+            if entry.level_scolarite in classes:
+                chart_data_class.append(classes.index(entry.level_scolarite))
+            else: # BAC
+                chart_data_class.append(11)
+        else:
+            j = len(chart_data_year) - 1
+            if year != (chart_data_year[j]+1):
+                k = year - chart_data_year[j] - 1
+                for n in range(k, 0, -1):
+                    chart_data_year.append(year - n)
+                    chart_data_class.append(None)
+                chart_data_year.append(year)
+                if entry.level_scolarite in classes:
+                    chart_data_class.append(classes.index(entry.level_scolarite))
+                else:  # BAC
+                    chart_data_class.append(11)
+            else:
+                chart_data_year.append(year)
+                if entry.level_scolarite in classes:
+                    chart_data_class.append(classes.index(entry.level_scolarite))
+                else:  # BAC
+                    chart_data_class.append(11)
+
+
+    chart_data_class_json = json.dumps(chart_data_class)
+    chart_data_year_json = json.dumps(chart_data_year)
+
+    print(chart_data_class_json)
+    print(chart_data_year_json)
+
+    context = {
+        'chart_data_class_json': chart_data_class_json,
+        'chart_data_year_json': chart_data_year_json,
+    }
+
+    return render(request, 'TestExample/C3.js Chart.html', context)
+
+
+#================================================================================================
 def line_chart_all(request):
     return render(request, 'TestExample/line_chart_all.html')
 

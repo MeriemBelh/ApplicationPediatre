@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>C3.js Chart</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.css">
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.js"></script>
+</head>
+<body>
+<div id="chart"></div>
+
+<script src="https://d3js.org/d3.v7.min.js" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.js"></script>
+<script>
+    var data = {
+        x: ['x', ...{{ chart_data_year_json|safe }}],
+        columns: [
+            ['x', ...{{ chart_data_year_json|safe }}],
+            ['data1', ...{{ chart_data_class_json|safe }}]
+        ],
+        colors: {
+            data1: '#fca5ba'
+        }
+    };
+
+    var chart = c3.generate({
+        bindto: '#chart_scolarite',
+        data: {
+            x: 'x',
+            columns: data.columns,
+            type: 'line',
+            colors: data.colors
+        },
+        axis: {
+            x: {
+                label: 'Year'
+            },
+            y: {
+                label: 'Grade',
+                tick: {
+                    format: function (d) {
+                        var grades = ['CP', 'CE1', 'CE2', 'CM1', 'CM2', '6ème', '1ère année', '2ème année', '3ème année', '4ème année', '5ème année', 'BAC'];
+                        var index = d < grades.length ? d : 0;
+                        return grades[index];
+                    },
+                    values: [0, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 10, 11]
+                }
+            }
+        }
+    });
+
+</script>
+
+</body>
+</html>
+
+<!--
+    var chartData = JSON.parse('{{ chart_data_json | safe }}');
+
+    var chart = c3.generate({
+        bindto: '#chart',
+        data: {
+            x: 'x',
+            columns: [
+                ['x'].concat(chartData.x),
+                ['Classe Primaire'].concat(chartData['Classe Primaire']),
+                ['Classe Secondaire'].concat(chartData['Classe Secondaire']),
+                ['BAC'].concat(chartData['BAC'])
+            ],
+            type: 'line'
+        },
+        axis: {
+            x: {
+                label: 'Year'
+            },
+            y: {
+                label: 'Level of Scolarite'
+            }
+        }
+    });
+-->
+
+<!--
+var chart = c3.generate({
+    bindto: '#chart',
+    data: {
+        x: 'x',
+        columns: [
+            ['x', 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014],
+            ['data1', 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+        ],
+        type: 'line',
+        colors: {
+            data1: '#1f77b4' // Set color for the line
+        }
+    },
+    axis: {
+        x: {
+            label: 'Year'
+        },
+        y: {
+            label: 'Grade',
+            tick: {
+                format: function (d) {
+                    var grades = ['CP', 'CE1', 'CE2', 'CM1', 'CM2', '6ème', '1ère année', '2ème année', '3ème année', '4ème année', '5ème année', 'BAC'];
+                    return grades[d];
+                },
+                values: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+            }
+        }
+    }
+});
+-->

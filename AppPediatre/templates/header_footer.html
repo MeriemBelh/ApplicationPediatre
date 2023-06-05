@@ -365,11 +365,11 @@ h1, h2, h3{
         <div class="top-bar__content">
             <div class="phone">
                 <i class="fa-solid fa-phone icon"></i>
-                <span>+212-xxxx-xxxx</span>
+                <span>{{ contact_info.phone_number }}</span>
             </div>
             <div class="email">
                 <i class="fa-solid fa-envelope icon"></i>
-                <span>xxxx@mailSite.com</span>
+                <span>{{ contact_info.email_address }}</span>
             </div>
         </div>
     </div>
@@ -415,7 +415,7 @@ h1, h2, h3{
 <div class="bg-blue header-inner text-white text-center">
     <div class="container grid">
         <div class="header-inner-left">
-            <h1>Votre partenaire santé dédié<br> <span>pour les enfants trisomiques</span></h1>
+            <h1>Votre partenaire santé dédié<br> <span>pour les enfants trisomiques au </span><span style="background-image:linear-gradient(to right, red,green);color:#fff;">Maroc</span></h1>
             <p class="lead">Meilleurs services de santé adaptés à vos besoins</p>
             <p class="text text-md" style="color:#fff">Notre site web est dédié à offrir des soins médicaux et une
                 attention particulière aux enfants trisomiques au Maroc, quel que soit leur statut social ou leurs
@@ -426,7 +426,7 @@ h1, h2, h3{
             </div>
         </div>
         <div class="header-inner-right">
-            <img src="{% static 'images/headerKids.png' %}">
+            <img src="{% static 'images/trisomie-21.jpg' %}">
         </div>
     </div>
 </div>
@@ -468,7 +468,7 @@ h1, h2, h3{
     <div class="container-foot">
         <div class="footer-content" style="padding-bottom:50px">
             <div class="items" >
-                <a href="#" class="logo" style="padding-bottom:15px">Trisomie21.com</a>
+                <a href="{% url 'homPage' %}" class="logo" style="padding-bottom:15px">Trisomie21.com</a>
                 <div class="social">
                     <a style="background: #004d80;" href="#"><i class="fa fa-facebook"></i></a>
                     <a style="background: #99ddff;" href="#"><i class="fa fa-twitter"></i></a>
@@ -480,9 +480,9 @@ h1, h2, h3{
             <div style="text-align:center" class="items">
                 <h3>Contact</h3>
                 <ul>
-                    <li><a href="tel:+212-xxxx-xxxx" onclick="copyContact(event, this.href, 'Numéro de téléphone copié', 'copyMessage1')"><i class="fa-solid fa-phone icon"></i> +212-xxxx-xxxx</a></li>
+                    <li><a href="tel:{{ contact_info.phone_number }}" onclick="copyContact(event, this.href, 'Numéro de téléphone copié', 'copyMessage1')"><i class="fa-solid fa-phone icon"></i> {{ contact_info.phone_number }}</a></li>
                     <p id="copyMessage1"></p>
-                    <li><a href="mailto:xxxx@mailSite.com" onclick="copyContact(event, this.href, 'Adresse mail copiée', 'copyMessage2')"><i class="fa-solid fa-envelope icon"></i>  xxxx@mailSite.com</a></li>
+                    <li><a href="mailto:{{ contact_info.email_address }}" onclick="copyContact(event, this.href, 'Adresse mail copiée', 'copyMessage2')"><i class="fa-solid fa-envelope icon"></i> {{ contact_info.email_address }}</a></li>
                     <p id="copyMessage2"></p>
                     <style>
                         #copyMessage1, #copyMessage2 {

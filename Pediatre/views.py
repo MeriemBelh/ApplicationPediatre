@@ -33,6 +33,7 @@ from AppPediatre.views import *
 from AppPediatre import settings
 
 from django.contrib.auth import get_user_model
+
 User = get_user_model()
 
 
@@ -449,6 +450,15 @@ def imprimer_dossier_patient_pdf(request, patient_id):
 
                 for i in range(0, len(obesite_dates)):
                     y = y - 21
+                    if (y < 20):
+                        pageNumber = pageNumber + 1
+                        text_color = HexColor('#212A3E')
+                        pdf.setFillColor(text_color)
+                        pdf.setFont("Helvetica", 10)
+                        pdf.drawString(408, 10, str(pageNumber))
+
+                        pdf.showPage()
+                        y = 570
                     row = [[obesite_dates[i], obesite_poids[i], obesite_tailles[i], obesite_imc[i]], ]
                     table = Table(row, colWidths=col_widths)
                     table.setStyle(table_style1)
@@ -465,7 +475,7 @@ def imprimer_dossier_patient_pdf(request, patient_id):
             y = y - 18
             pdf.setFillColor(colors.black)
             leading = 18
-            if patientInfo.pathologie_ophtalmologique != "":
+            if patientInfo.pathologie_ophtalmologique != "" and patientInfo.pathologie_ophtalmologique != "None":
                 max_width = 840
                 font_size = 10
                 font_name = 'Helvetica'
@@ -492,7 +502,7 @@ def imprimer_dossier_patient_pdf(request, patient_id):
             y = y - 18
             pdf.setFillColor(colors.black)
             leading = 18
-            if patientInfo.pathologie_orl != "":
+            if patientInfo.pathologie_orl != "" and patientInfo.pathologie_orl != "None":
                 max_width = 840
                 font_size = 10
                 font_name = 'Helvetica'
@@ -523,15 +533,59 @@ def imprimer_dossier_patient_pdf(request, patient_id):
             pdf.setFont("Helvetica-Bold", 12)
             pdf.drawString(15, 570, "Pathologie suivi dentaire : ")
 
+            # ----table des dents traites
             y = 570
-            y = y - 18
+            y = y - 30
             pdf.setFillColor(colors.black)
             leading = 18
-            if patientInfo.pathologie_suivie_dentaire != "":
+            dents = [["Date d'act", 'Dent', "Code d'act"],
+                     ]
+            col_widths = [3 * cm, 3 * cm, 3 * cm]
+            table = Table(dents, colWidths=col_widths)
+            table.setStyle(table_style1)
+            table.wrapOn(pdf, 0, 0)
+            table.drawOn(pdf, 15, y)
+
+            if patientInfo.pathologie_suivie_dentaire == "Oui":
+                date_act = []
+                dent_num = []
+                code_act = []
+                patientPathologieDentaire = PathologieDentaire.objects.filter(patientID=patient_id)
+                for x in patientPathologieDentaire:
+                    date_act.append(x.date_act)
+                    dent_num.append(str(x.dent_GaucheDroit) + str(x.dent_HautBas) + "-" + str(x.dent_num))
+                    code_act.append(x.code_act)
+
+                for i in range(0, len(date_act)):
+                    y = y - 21
+                    if (y < 20):
+                        pageNumber = pageNumber + 1
+                        text_color = HexColor('#212A3E')
+                        pdf.setFillColor(text_color)
+                        pdf.setFont("Helvetica", 10)
+                        pdf.drawString(408, 10, str(pageNumber))
+
+                        pdf.showPage()
+                        y = 570
+                    row = [[date_act[i], dent_num[i], code_act[i]], ]
+                    table = Table(row, colWidths=col_widths)
+                    table.setStyle(table_style1)
+                    table.wrapOn(pdf, 0, 0)
+                    table.drawOn(pdf, 15, y)
+
+            # ---commentaire
+            y = y - 18
+            text_color = HexColor('#93BFCF')
+            pdf.setFillColor(text_color)
+            pdf.setFont("Helvetica-Bold", 11)
+            pdf.drawString(15, y, "Commentaire : ")
+            y = y - 18
+            pdf.setFillColor(colors.black)
+            if patientInfo.pathologie_suivie_dentaire_Commentaire != "" and patientInfo.pathologie_suivie_dentaire_Commentaire != "None":
                 max_width = 840
                 font_size = 10
                 font_name = 'Helvetica'
-                lines = textwrap.wrap(patientInfo.pathologie_suivie_dentaire,
+                lines = textwrap.wrap(patientInfo.pathologie_suivie_dentaire_Commentaire,
                                       width=max_width // font_size)
                 pdf.setFont(font_name, font_size)
                 for line in lines:
@@ -553,7 +607,7 @@ def imprimer_dossier_patient_pdf(request, patient_id):
             y = y - 18
             pdf.setFillColor(colors.black)
             leading = 18
-            if patientInfo.pathologie_osteoarticulaire != "":
+            if patientInfo.pathologie_osteoarticulaire != "" and patientInfo.pathologie_osteoarticulaire != "None":
                 max_width = 840
                 font_size = 10
                 font_name = 'Helvetica'
@@ -579,7 +633,7 @@ def imprimer_dossier_patient_pdf(request, patient_id):
             y = y - 18
             pdf.setFillColor(colors.black)
             leading = 18
-            if patientInfo.pathologie_neurologique != "":
+            if patientInfo.pathologie_neurologique != "" and patientInfo.pathologie_neurologique != "None":
                 max_width = 840
                 font_size = 10
                 font_name = 'Helvetica'
@@ -620,7 +674,7 @@ def imprimer_dossier_patient_pdf(request, patient_id):
             y = y - 18
             pdf.setFillColor(colors.black)
             leading = 18
-            if patientInfo.imagerie_faite != "":
+            if patientInfo.imagerie_faite != "" and patientInfo.imagerie_faite != "None":
                 max_width = 840
                 font_size = 10
                 font_name = 'Helvetica'
@@ -661,7 +715,7 @@ def imprimer_dossier_patient_pdf(request, patient_id):
             y = y - 18
             pdf.setFillColor(colors.black)
             leading = 18
-            if patientInfo.autre_pathologie != "":
+            if patientInfo.autre_pathologie != "" and patientInfo.autre_pathologie != "None":
                 max_width = 840
                 font_size = 10
                 font_name = 'Helvetica'
@@ -686,7 +740,7 @@ def imprimer_dossier_patient_pdf(request, patient_id):
             y = y - 18
             pdf.setFillColor(colors.black)
             leading = 18
-            if patientInfo.traitement != "":
+            if patientInfo.traitement != "" and patientInfo.traitement != "None":
                 max_width = 840
                 font_size = 10
                 font_name = 'Helvetica'
@@ -738,7 +792,7 @@ def imprimer_dossier_patient_pdf(request, patient_id):
             y = y - 18
             pdf.setFillColor(colors.black)
             leading = 18
-            if patientInfo.Psychomotricien_commentaire != "":
+            if patientInfo.Psychomotricien_commentaire != "" and patientInfo.Psychomotricien_commentaire != "None":
                 max_width = 840
                 font_size = 10
                 font_name = 'Helvetica'
@@ -788,7 +842,7 @@ def imprimer_dossier_patient_pdf(request, patient_id):
             y = y - 18
             pdf.setFillColor(colors.black)
             leading = 18
-            if patientInfo.Kinesitherapie_fonctionnelle_commentaire != "":
+            if patientInfo.Kinesitherapie_fonctionnelle_commentaire != "" and patientInfo.Kinesitherapie_fonctionnelle_commentaire != "None":
                 max_width = 840
                 font_size = 10
                 font_name = 'Helvetica'
@@ -830,7 +884,7 @@ def imprimer_dossier_patient_pdf(request, patient_id):
             y = y - 18
             pdf.setFillColor(colors.black)
             leading = 18
-            if patientInfo.Psychologue_commentaire != "":
+            if patientInfo.Psychologue_commentaire != "" and patientInfo.Psychologue_commentaire != "None":
                 max_width = 840
                 font_size = 10
                 font_name = 'Helvetica'
@@ -880,7 +934,7 @@ def imprimer_dossier_patient_pdf(request, patient_id):
             y = y - 18
             pdf.setFillColor(colors.black)
             leading = 18
-            if patientInfo.Orthophoniste_commentaire != "":
+            if patientInfo.Orthophoniste_commentaire != "" and patientInfo.Orthophoniste_commentaire != "None":
                 max_width = 840
                 font_size = 10
                 font_name = 'Helvetica'
@@ -922,7 +976,7 @@ def imprimer_dossier_patient_pdf(request, patient_id):
             y = y - 18
             pdf.setFillColor(colors.black)
             leading = 18
-            if patientInfo.Orthoptiste_commentaire != "":
+            if patientInfo.Orthoptiste_commentaire != "" and patientInfo.Orthoptiste_commentaire != "None":
                 max_width = 840
                 font_size = 10
                 font_name = 'Helvetica'
@@ -1175,8 +1229,6 @@ def imprimer_dossier_patient_pdf(request, patient_id):
                 pdf.setFont("Helvetica", 10)
                 pdf.drawString(408, 10, str(pageNumber))
 
-
-
         ####################################################################################
         # FileResponse sets the Content-Disposition header so that browsers
         # present the option to save the file.
@@ -1184,7 +1236,7 @@ def imprimer_dossier_patient_pdf(request, patient_id):
         pdf.save()
         return response
     else:
-        return redirect('login_pediatre')
+        return redirect('homPage')
 
 
 def modifier_patient(request, patient_id):
@@ -1316,7 +1368,8 @@ def modifier_patient(request, patient_id):
 
             suiviDentaireInfos = []
             for i in range(0, len(dates_acts)):
-                suiviDentaireInfos.append([dates_acts[i], dent_GaucheDroits[i],dent_HautBass[i],dent_nums[i], codes_acts[i]])
+                suiviDentaireInfos.append(
+                    [dates_acts[i], dent_GaucheDroits[i], dent_HautBass[i], dent_nums[i], codes_acts[i]])
 
             opereInfos = []
             for i in range(0, len(opere_dates)):
@@ -1363,7 +1416,7 @@ def modifier_patient(request, patient_id):
             CPr = ClassePrimaire.objects.values_list('classePName', flat=True)
             CSr = ClasseSecondaire.objects.values_list('classeSName', flat=True)
             mutuelles = Mutuelle.objects.values_list('mutuelleName', flat=True).order_by('mutuelleName')
-            numDents8 = ['1','2','3','4','5','6','7','8']
+            numDents8 = ['1', '2', '3', '4', '5', '6', '7', '8']
             context = {
                 'mutuelles': list(mutuelles),
                 'numDents8': list(numDents8),
@@ -1684,7 +1737,6 @@ def modifier_patient(request, patient_id):
                 patientScolarite = PatientScolarite.objects.filter(patientID=patient_id)
                 patientDentaire = PathologieDentaire.objects.filter(patientID=patient_id)
 
-
                 # Modifier User et patient
                 userPatient.email = mailPatient
                 userPatient.first_name = prenom
@@ -1842,10 +1894,10 @@ def modifier_patient(request, patient_id):
                         patientOpere = PathologieCardiqueOpere(patientID=patient_id,
                                                                opere_date=opere_dates1[x],
                                                                opere_type=opere_types1[x],
-                                                               opere_suivi = opere_suivi1[x],)
+                                                               opere_suivi=opere_suivi1[x], )
                         patientOpere.save()
                         if patientOpere.opere_suivi == "Oui":
-                            patientOpere.opere_suivi_date=opere_suivi_date1[osd]
+                            patientOpere.opere_suivi_date = opere_suivi_date1[osd]
                             osd = osd + 1
                             patientOpere.save()
 
@@ -1855,7 +1907,8 @@ def modifier_patient(request, patient_id):
                                                     obesite_date=obesite_dates1[x],
                                                     obesite_poids=obesite_poids1[x],
                                                     obesite_taille=obesite_taille1[x],
-                                                    imc=round(float(obesite_poids1[x]) / ((float(obesite_taille1[x]) / 100) ** 2), 3))
+                                                    imc=round(float(obesite_poids1[x]) / (
+                                                                (float(obesite_taille1[x]) / 100) ** 2), 3))
                         patientObesite.save()
                 if (activite_prof == ("Oui")):
                     for x in APr1:
@@ -1916,7 +1969,7 @@ def modifier_patient(request, patient_id):
                     submitted = True
             return render(request, 'Pediatre/modifierPatient_pediatre.html', context)
     else:
-        return redirect('login_pediatre')
+        return redirect('homPage')
 
 
 def supprimer_patient(request, patient_id):
@@ -1956,7 +2009,7 @@ def supprimer_patient(request, patient_id):
             url = reverse('home_pediatre') + f'?error={errorMessage}&errorValue={errorValue}'
             return redirect(url)
     else:
-        return redirect('login_pediatre')
+        return redirect('homPage')
 
 
 def pediatre(request):
@@ -2504,7 +2557,7 @@ def recherche_patient(request):
                       {'error': error, 'errorValue': errorValue, 'submitted': submitted,
                        'patients': patients, })
     else:
-        return redirect('login_pediatre')
+        return redirect('homPage')
 
 
 def afficher_infos_patient(request, patient_id):
@@ -2516,7 +2569,8 @@ def afficher_infos_patient(request, patient_id):
             # Retrieve the user data
             obesite_dates_user = ObesiteImc.objects.filter(patientID=patient_id).values_list('obesite_date', flat=True)
             obesite_poids_user = ObesiteImc.objects.filter(patientID=patient_id).values_list('obesite_poids', flat=True)
-            obesite_taille_user = ObesiteImc.objects.filter(patientID=patient_id).values_list('obesite_taille', flat=True)
+            obesite_taille_user = ObesiteImc.objects.filter(patientID=patient_id).values_list('obesite_taille',
+                                                                                              flat=True)
             obesite_imc_user = ObesiteImc.objects.filter(patientID=patient_id).values_list('imc', flat=True)
 
         except ObjectDoesNotExist:
@@ -2629,12 +2683,12 @@ def afficher_infos_patient(request, patient_id):
                     for x in patientActivite:
                         APr.append(x.description_activite)
 
-                #Statics Code
+                # Statics Code
                 birthday = patient.dateNaissancePatient
                 for obesite_date in obesite_dates_user:
                     age_delta = relativedelta(obesite_date, birthday)
-                    age = age_delta.years + age_delta.months / 12 + age_delta.days / 365
-                    age_list.append(age)
+                    age_in_months = age_delta.years * 12 + age_delta.months + age_delta.days / 30
+                    age_list.append(age_in_months)
 
                 for i in range(0, len(age_list)):
                     data_poids.append([age_list[i], obesite_poids_user[i]])
@@ -2648,8 +2702,52 @@ def afficher_infos_patient(request, patient_id):
                 # Take the image URL
                 file_name = os.path.basename(patient.imgPatient.url)
                 img_path = "/imgProfile_patient/" + file_name
+                try:
+                    data = PatientScolarite.objects.filter(patientID=patient_id).order_by('year_scolarite')
+                    chart_data_year = []
+                    classes = ['CP', 'CE1', 'CE2', 'CM1', 'CM2', '6ème', '1ère année', '2ème année', '3ème année',
+                               '4ème année', '5ème année']
+                    chart_data_class = []
+
+                    for entry in data:
+                        year = int(entry.year_scolarite.split('/')[0])
+
+                        if not chart_data_year:  # Check if the list is empty
+                            chart_data_year.append(year)
+                            if entry.level_scolarite in classes:
+                                chart_data_class.append(classes.index(entry.level_scolarite))
+                            else:  # BAC
+                                chart_data_class.append(11)
+                        else:
+                            j = len(chart_data_year) - 1
+                            if year != (chart_data_year[j] + 1):
+                                k = year - chart_data_year[j] - 1
+                                for n in range(k, 0, -1):
+                                    chart_data_year.append(year - n)
+                                    chart_data_class.append(None)
+                                chart_data_year.append(year)
+                                if entry.level_scolarite in classes:
+                                    chart_data_class.append(classes.index(entry.level_scolarite))
+                                else:  # BAC
+                                    chart_data_class.append(11)
+                            else:
+                                chart_data_year.append(year)
+                                if entry.level_scolarite in classes:
+                                    chart_data_class.append(classes.index(entry.level_scolarite))
+                                else:  # BAC
+                                    chart_data_class.append(11)
+
+                    chart_data_class_json = json.dumps(chart_data_class)
+                    chart_data_year_json = json.dumps(chart_data_year)
+                except BaseException as e:
+                    print(str(e))
+                    chart_data_class_json = []
+                    chart_data_year_json = []
 
                 context = {
+                    'chart_data_class_json': chart_data_class_json,
+                    'chart_data_year_json': chart_data_year_json,
+
                     'errorMessage': errorMessage,
                     'errorValue': errorValue,
 
@@ -2795,7 +2893,7 @@ def afficher_infos_patient(request, patient_id):
                 }
                 return render(request, 'Pediatre/afficherPatient_pediatre.html', context)
     else:
-        return redirect('login_pediatre')
+        return redirect('homPage')
 
 
 def ajouter_patient_pediatre(request):
@@ -3111,11 +3209,11 @@ def ajouter_patient_pediatre(request):
                                 if pathologie_suivie_dentaire == "Oui":
                                     for x in range(0, len(dates_acts)):
                                         pathologieDentaire = PathologieDentaire(patientID=idPatientNew,
-                                                                               date_act=dates_acts[x],
-                                                                               dent_GaucheDroit=dent_GaucheDroit[x],
-                                                                               dent_HautBas=dent_HautBas[x],
-                                                                               dent_num=dent_num[x],
-                                                                               code_act=codes_acts[x])
+                                                                                date_act=dates_acts[x],
+                                                                                dent_GaucheDroit=dent_GaucheDroit[x],
+                                                                                dent_HautBas=dent_HautBas[x],
+                                                                                dent_num=dent_num[x],
+                                                                                code_act=codes_acts[x])
                                         pathologieDentaire.save()
 
                                 if opere == ("Oui"):
@@ -3137,7 +3235,9 @@ def ajouter_patient_pediatre(request):
                                                                     obesite_date=obesite_dates[x],
                                                                     obesite_poids=obesite_poids[x],
                                                                     obesite_taille=obesite_taille[x],
-                                                                    imc=round(float(obesite_poids[x]) / ((float(obesite_taille[x]) / 100) ** 2), 3))
+                                                                    imc=round(float(obesite_poids[x]) / (
+                                                                                (float(obesite_taille[x]) / 100) ** 2),
+                                                                              3))
                                         patientObesite.save()
                                 if (activite_prof == ("Oui")):
                                     for x in APr:
@@ -3214,7 +3314,7 @@ def ajouter_patient_pediatre(request):
 
         return render(request, 'Pediatre/ajouterPatient_pediatre.html', context)
     else:
-        return redirect('login_pediatre')
+        return redirect('homPage')
 
 
 def classes_ajax(request):
@@ -3258,14 +3358,14 @@ def home_pediatre(request):
             }
             return render(request, 'Pediatre/mesPatients_pediatre.html', context)
     else:
-        return redirect('login_pediatre')
+        return redirect('homPage')
 
 
 def index_pediatre(request):
     if request.user.is_authenticated:
         return redirect('home_pediatre')
     else:
-        return redirect('login_pediatre')
+        return redirect('homPage')
 
 
 def corbeille_patient(request):
@@ -3280,7 +3380,7 @@ def corbeille_patient(request):
         }
         return render(request, 'Pediatre/corbeillePatients_pediatre.html', context)
     else:
-        return redirect('login_pediatre')
+        return redirect('homPage')
 
 
 def add_patient_corbeille(request, patient_id):
@@ -3288,7 +3388,7 @@ def add_patient_corbeille(request, patient_id):
         try:
             patient = Patient.objects.get(idPatient=patient_id)
             patient.is_deleted = "Oui"
-            #Desactiver l'user
+            # Desactiver l'user
             patient.user.is_active = False
             patient.user.save()
             patient.save()
@@ -3302,7 +3402,8 @@ def add_patient_corbeille(request, patient_id):
         else:
             return redirect('home_pediatre')
     else:
-        return redirect('login_pediatre')
+        return redirect('homPage')
+
 
 def restore_patient_corbeille(request, patient_id):
     if request.user.is_authenticated:
@@ -3323,7 +3424,8 @@ def restore_patient_corbeille(request, patient_id):
         else:
             return redirect('corbeille_patient')
     else:
-        return redirect('login_pediatre')
+        return redirect('homPage')
+
 
 def login_pediatre(request):
     error = ""
@@ -3336,6 +3438,7 @@ def login_pediatre(request):
             login(request, user)
             return redirect('home_pediatre')
     return render(request, 'loginUsers.html', {'error': error, 'errorValue': errorValue})
+
 
 def nouveau_pediatre(request):
     error = ""
@@ -3376,6 +3479,7 @@ def nouveau_pediatre(request):
         errorValue = True
     return render(request, 'Pediatre/nouveauPediatre.html', {'error': error, 'errorValue': errorValue})
 
+
 def logout_pediatre(request):
     if request.user.is_authenticated:
         try:
@@ -3388,7 +3492,8 @@ def logout_pediatre(request):
         else:
             return redirect("index_pediatre")
     else:
-        return redirect('login_pediatre')
+        return redirect('homPage')
+
 
 def messagerie_pediatre(request):
     if request.user.is_authenticated:
@@ -3401,17 +3506,17 @@ def messagerie_pediatre(request):
 
             for c in conversations:
                 try:
-                    #Conter le nbr des msgs qui sont vu par l'utilisateur pour cette conversation
+                    # Conter le nbr des msgs qui sont vu par l'utilisateur pour cette conversation
                     message_vu = Message.objects.filter(conversation=c, vu=False, receiver=request.user)
-                    #Conter le nbr des messages qui ne sont pas vu par l'user
+                    # Conter le nbr des messages qui ne sont pas vu par l'user
                     nbrVu = len(message_vu)
-                    #Si aucun msg n'est vu je vais pas ajouter un style css
+                    # Si aucun msg n'est vu je vais pas ajouter un style css
                     if nbrVu == 0:
                         msg_is_vu = True
                     else:
                         msg_is_vu = False
 
-                    #Prendre le dernier message d'une conversation
+                    # Prendre le dernier message d'une conversation
                     message = Message.objects.filter(conversation=c).latest('dateEnvoie')
                     last_message = message.message
                     if len(last_message) > 112:
@@ -3438,7 +3543,8 @@ def messagerie_pediatre(request):
         else:
             return render(request, 'Pediatre/messageriePediatre_pediatre.html', context)
     else:
-        return redirect('login_pediatre')
+        return redirect('homPage')
+
 
 def conversation_pediatre(request, conversation_id):
     if request.user.is_authenticated:
@@ -3455,7 +3561,8 @@ def conversation_pediatre(request, conversation_id):
         }
         return render(request, 'Pediatre/conversation_pediatre_pediatre.html', context)
     else:
-        return redirect('login_pediatre')
+        return redirect('homPage')
+
 
 def conversation_pediatre_ajax(request, conversation_id):
     if request.user.is_authenticated:
@@ -3469,10 +3576,10 @@ def conversation_pediatre_ajax(request, conversation_id):
         data = []
         for m in messages:
             moi = 'False'
-            if m.sender == request.user :
+            if m.sender == request.user:
                 moi = 'True'
             data.append({
-                'moi' : moi,
+                'moi': moi,
                 'sender': m.sender.last_name + ' ' + m.sender.first_name,
                 'message': m.message,
                 'dateEnvoie': m.dateEnvoie,
@@ -3480,7 +3587,8 @@ def conversation_pediatre_ajax(request, conversation_id):
             })
         return JsonResponse(data, safe=False)
     else:
-        return redirect('login_pediatre')
+        return redirect('homPage')
+
 
 def send_message_pediatre(request, conversation_id):
     if request.user.is_authenticated:
@@ -3503,7 +3611,8 @@ def send_message_pediatre(request, conversation_id):
             # return a JSON response indicating success
             return JsonResponse({'status': 'ok'})
     else:
-        return redirect('login_pediatre')
+        return redirect('homPage')
+
 
 def recherche_conversation_pediatre(request):
     if request.user.is_authenticated:
@@ -3556,10 +3665,11 @@ def recherche_conversation_pediatre(request):
                 conversations = None
 
         context = {'boite_reception': boite_reception}
-        #boite_reception.append([c, msg_is_vu, nbrVu, truncated_msg, message])
+        # boite_reception.append([c, msg_is_vu, nbrVu, truncated_msg, message])
         return render(request, 'Pediatre/messageriePediatre_pediatre.html', context)
     else:
-        return redirect('login_pediatre')
+        return redirect('homPage')
+
 
 def new_conversation_pediatre(request):
     if request.user.is_authenticated:
@@ -3571,7 +3681,7 @@ def new_conversation_pediatre(request):
             subject = request.POST['subject']
             message = request.POST['message']
 
-            #Recherche d'username
+            # Recherche d'username
             try:
                 receiver = User.objects.get(username=destinataire)
             except User.DoesNotExist:
@@ -3579,12 +3689,12 @@ def new_conversation_pediatre(request):
                 errorValue = True
                 error = "Error: User '{destinataire}' does not exist"
                 context = {
-                    'errorValue':errorValue,
-                    'error':error,
+                    'errorValue': errorValue,
+                    'error': error,
                 }
                 return render(request, 'Pediatre/newConversation_Pediatre.html', context)
             else:
-                #Creation d'une conversation
+                # Creation d'une conversation
                 conversation = Conversation(sujet=subject, receiver=receiver, sender=request.user)
                 conversation.save()
                 message = Message(conversation=conversation, receiver=receiver, sender=request.user,
@@ -3595,4 +3705,4 @@ def new_conversation_pediatre(request):
         else:
             return render(request, 'Pediatre/newConversation_Pediatre.html')
     else:
-        return redirect('login_pediatre')
+        return redirect('homPage')

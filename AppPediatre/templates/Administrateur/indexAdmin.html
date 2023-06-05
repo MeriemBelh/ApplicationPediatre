@@ -21,7 +21,7 @@
                                         <i class="fas fa-user-md"></i>
                                     </span>
                     <div class="dash-count">
-                        <div class="dash-title">Spécialistes</div>
+                        <div class="dash-title">Pédiatres</div>
                         <div class="dash-counts">
                             <p>{{specialistesNbr}}</p>
                         </div>
@@ -89,7 +89,7 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col">
-                        <h5 class="card-title">Patient</h5>
+                        <h5 class="card-title">Patients</h5>
                     </div>
                     <div class="col-auto">
                         <a href="{% url 'gestion_patients' %}" class="btn-right btn btn-sm btn-outline-primary">
@@ -115,7 +115,7 @@
                         <tr>
                             <td>
                                 <h2 class="table-avatar">
-                                    <a href="profile.html"><img
+                                    <a href="{% url 'afficher_patient' patient_id=p.idPatient %}"><img
                                             class="avatar avatar-sm me-2 avatar-img rounded-circle"
                                             src="{{img}}"
                                             alt="User Image"> {{p.nomPatient}} {{p.prenomPatient}}</a>
@@ -157,11 +157,11 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col">
-                        <h5 class="card-title">Pediatres</h5>
+                        <h5 class="card-title">Pédiatres</h5>
                     </div>
                     <div class="col-auto">
-                        <a href="estimates.html" class="btn-right btn btn-sm btn-outline-primary">
-                            View All
+                        <a href="{% url 'gestion_pediatre' %}" class="btn-right btn btn-sm btn-outline-primary">
+                            Voir tous
                         </a>
                     </div>
                 </div>
@@ -183,9 +183,9 @@
                         <tr>
                             <td>
                                 <h2 class="table-avatar">
-                                    <a href="profile.html"><img
+                                    <a href="{% url 'afficher_pediatre' pediatre=p.user.username %}"><img
                                             class="avatar avatar-sm me-2 avatar-img rounded-circle"
-                                            src="{% static 'images/Admin/profiles/avatar-05.jpg' %}"
+                                            src="{% static 'images/default-user-image-admin.jpg' %}"
                                             alt="User Image">{{p.nomPediatre}} {{p.prenomPediatre}}</a>
                                 </h2>
                             </td>
@@ -198,11 +198,11 @@
                                        data-bs-toggle="dropdown" aria-expanded="false"><i
                                             class="fas fa-ellipsis-h"></i></a>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="edit-invoice.html"><i
+                                        <a class="dropdown-item" href="{% url 'editer_pediatre' pediatre=p.inpe %}"><i
                                                 class="far fa-edit me-2"></i>Editer</a>
                                         <a class="dropdown-item" href="javascript:void(0);"><i
                                                 class="far fa-trash-alt me-2"></i>Supprimer</a>
-                                        <a class="dropdown-item" href="view-estimate.html"><i
+                                        <a class="dropdown-item" href="{% url 'editer_pediatre' pediatre=p.inpe %}"><i
                                                 class="far fa-eye me-2"></i>Voir</a>
                                     </div>
                                 </div>

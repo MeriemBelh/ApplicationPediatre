@@ -1,0 +1,163 @@
+{% extends 'Administrateur/base_admin.html' %}
+{% load static %}
+{% block title %}<title>Afficher admin</title>{% endblock %}
+{% block sideBar %}
+<ul>
+    <li class="menu-title"><span>Menu</span></li>
+    <li>
+        <a href="{% url 'index_admin' %}"><i data-feather="home"></i> <span>tableau de bord</span></a>
+    </li>
+    <li>
+        <a href="{% url 'statistiques' %}"><i data-feather="pie-chart"></i> <span> Statistiques</span> </a>
+    </li>
+    <li>
+        <a href="#"><i data-feather="bell"></i> <span>Actualités</span><span
+                class="menu-arrow"></span></a>
+        <ul>
+            <li><a href="{% url 'affichage_actualite' %}">Toutes les actualités</a></li>
+            <li><a href="{% url 'ajout_actualite' %}">Ajouter une actualité</a></li>
+        </ul>
+    </li>
+    <li>
+        <a href="{% url 'chatAdmin' %}"><i data-feather="mail"></i> <span>Messagerie</span></a>
+    </li>
+    <li class="menu-title"><span>Gestion Comptes</span></li>
+    <li>
+        <a href="{% url 'gestion_administrateurs' %}"><i data-feather="lock"></i> <span> Administrateurs </span></a>
+    </li>
+    <li>
+        <a href="{% url 'gestion_patients' %}"><i data-feather="users"></i>
+            <span>Patients</span></a>
+    </li>
+    <li>
+        <a><i data-feather="clipboard"></i><span>Pédiatres</span></a>
+    </li>
+
+
+    <li class="menu-title">
+        <span>Gestion media</span>
+    </li>
+    <li>
+        <a href="#"><i data-feather="video"></i> <span>Videos</span><span
+                class="menu-arrow"></span></a>
+        <ul>
+            <li><a href="{% url 'affichage_video' %}">Toutes les videos</a></li>
+            <li><a href="{% url 'ajout_video' %}">Ajouter une video</a></li>
+        </ul>
+    </li>
+    <li>
+        <a href="#"><i data-feather="image"></i> <span>Images</span><span
+                class="menu-arrow"></span></a>
+        <ul>
+            <li><a href="{% url 'affichage_image' %}">Toutes les images</a></li>
+            <li><a href="{% url 'ajout_image' %}">Ajouter une image</a></li>
+        </ul>
+    </li>
+    <li class="menu-title">
+        <span>Autre</span>
+    </li>
+    <li>
+        <a href="{% url 'parametres' %}"><i data-feather="phone"></i> <span>Contact</span></a>
+    </li>
+</ul>
+{% endblock %}
+{% block contenu %}
+{% if error == True %}
+<div class="row">
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ errorMsg }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</div>
+{% endif %}
+<div class="page-header">
+    <div class="row align-items-center">
+        <div class="col">
+            <h3 class="page-title">Profile</h3>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'index_admin' %}">Tableau de bord</a>
+                </li>
+                <li class="breadcrumb-item"><a href="{% url 'gestion_pediatre' %}">Pediatres</a></li>
+                <li class="breadcrumb-item active">Profile</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="text-center mb-5">
+    <label class="avatar avatar-xxl profile-cover-avatar" for="avatar_upload">
+        <img class="avatar-img" src="{% static 'images/default-user-image-admin.jpg' %}" alt="Profile Image">
+    </label>
+    <h2>{{ pediatre.nomPediatre }} {{ pediatre.prenomPediatre }}</h2>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Informations Pediatre</h5>
+            </div>
+            <div class="card-body card-body-height">
+                <ul class="activity-feed">
+                    <li class="feed-item">
+                        <div class="feed-date">Nom complet</div>
+                        <span class="feed-text">{{ pediatre.nomPediatre }} {{ pediatre.prenomPediatre }}</span>
+                    </li>
+                </ul>
+                <ul class="activity-feed">
+                    <li class="feed-item">
+                        <div class="feed-date">Inpe du pediatre</div>
+                        <span class="feed-text">{{ pediatre.inpe }}</span>
+                    </li>
+                </ul>
+                <ul class="activity-feed">
+                    <li class="feed-item">
+                        <div class="feed-date">Cni du pediatre</div>
+                        <span class="feed-text">{{ pediatre.cniPediatre }}</span>
+                    </li>
+                </ul>
+                <ul class="activity-feed">
+                    <li class="feed-item">
+                        <div class="feed-date">Hopital du pediatre</div>
+                        <span class="feed-text">Hopital {{ pediatre.hopitalPediatre }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Contact Pediatre</h5>
+            </div>
+            <div class="card-body card-body-height">
+                <ul class="activity-feed">
+                    <li class="feed-item">
+                        <div class="feed-date">Email</div>
+                        <span class="feed-text">{{ pediatre.mailPediatre }}</span>
+                    </li>
+                </ul>
+                <ul class="activity-feed">
+                    <li class="feed-item">
+                        <div class="feed-date">Num du telephone</div>
+                        <span class="feed-text">{{ pediatre.numTelephonePediatre }}</span>
+                    </li>
+                </ul>
+                <ul class="activity-feed">
+                    <li class="feed-item">
+                        <div class="feed-date">Adresse du pediatre</div>
+                        <span class="feed-text">{{ pediatre.adressePediatre }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+<script src="{% static 'js/js/jquery.steps.js' %}"></script>
+<script src="{% static 'js/js/main.js' %}"></script>
+<script src="{% static 'js/js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
+<script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'plugins/datatables/datatables.min.js' %}"></script>
+
+{% endblock %}

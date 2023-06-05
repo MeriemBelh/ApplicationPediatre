@@ -28,13 +28,8 @@
     <li>
         <a href="{% url 'gestion_patients' %}"><i data-feather="users"></i> <span>Patients</span></a>
     </li>
-    <li class="submenu">
-        <a href="#"><i data-feather="clipboard"></i> <span> Spécialistes</span> <span
-                class="menu-arrow"></span></a>
-        <ul>
-            <li><a href="">Pediatre</a></li>
-            <li><a href="">Dentiste</a></li>
-        </ul>
+    <li>
+        <a href="{% url 'gestion_pediatre' %}"><i data-feather="clipboard"></i><span>Pédiatres</span></a>
     </li>
 
     <li class="menu-title">
@@ -57,13 +52,10 @@
         </ul>
     </li>
     <li class="menu-title">
-        <span>Réglages</span>
+        <span>Autre</span>
     </li>
     <li>
-        <a href="profile.html"><i data-feather="user-plus"></i> <span>Profile</span></a>
-    </li>
-    <li>
-        <a href="settings.html"><i data-feather="settings"></i> <span>Paramètres</span></a>
+        <a href="{% url 'parametres' %}"><i data-feather="phone"></i> <span>Contact</span></a>
     </li>
 </ul>
 {% endblock %}
@@ -86,7 +78,7 @@
         <div class="blog grid-blog flex-fill">
             <div class="blog-image">
                 <a><img src="{{x.image.url}}" height="70%" width="70%" class="img-thumbnail"
-                                                 alt="..."></a>
+                        alt="..."></a>
             </div>
             <div class="row">
                 <div class="edit-options">

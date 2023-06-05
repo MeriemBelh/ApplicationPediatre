@@ -4,55 +4,63 @@
 
 {% block sideBar %}
     <ul>
-        <li class="menu-title"><span>Menu</span></li>
-        <li>
-            <a href="{% url 'index_admin' %}"><i data-feather="home"></i> <span>Dashboard</span></a>
-        </li>
-        <li>
-            <a href="#"><i data-feather="lock"></i> <span> Administrateurs </span></a>
-        </li>
-        <li class="active">
-            <a href="{% url 'gestion_patients' %}"><i data-feather="users"></i> <span>Patients</span></a>
-        </li>
-        <li class="submenu">
-            <a href="#"><i data-feather="clipboard"></i> <span> Spécialistes</span> <span
-                    class="menu-arrow"></span></a>
-            <ul>
-                <li><a href="">Pediatre</a></li>
-                <li><a href="">Dentiste</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="#"><i data-feather="mail"></i> <span>Messagerie</span></a>
-        </li>
-        <li>
-            <a href="{% url 'statistiques' %}"><i data-feather="pie-chart"></i> <span> Statistiques</span> </a>
-        </li>
-        <li class="menu-title">
-            <span>Media</span>
-        </li>
-        <li>
-            <a href="#"><i data-feather="video"></i> <span>Videos</span></a>
-        </li>
-        <li>
-            <a href="#"><i data-feather="image"></i> <span>Slides</span></a>
-        </li>
-        <li>
-            <a href="#"><i data-feather="bell"></i> <span>Actualités</span></a>
-        </li>
-        <li>
-            <a href="#"><i data-feather="file"></i> <span>Rapports</span></a>
-        </li>
-        <li class="menu-title">
-            <span>Réglages</span>
-        </li>
-        <li>
-            <a href="profile.html"><i data-feather="user-plus"></i> <span>Profile</span></a>
-        </li>
-        <li>
-            <a href="settings.html"><i data-feather="settings"></i> <span>Paramètres</span></a>
-        </li>
-    </ul>
+                        <li class="menu-title"><span>Menu</span></li>
+                        <li>
+                            <a href="{% url 'index_admin' %}"><i data-feather="home"></i> <span>tableau de bord</span></a>
+                        </li>
+                        <li>
+                            <a href="{% url 'statistiques' %}"><i data-feather="pie-chart"></i> <span> Statistiques</span> </a>
+                        </li>
+                        <li>
+                        <a href="#"><i data-feather="bell"></i> <span>Actualités</span><span
+                                class="menu-arrow"></span></a>
+                            <ul>
+                                <li><a href="{% url 'affichage_actualite' %}">Toutes les actualités</a></li>
+                                <li><a href="{% url 'ajout_actualite' %}">Ajouter une actualité</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="{% url 'chatAdmin' %}"><i data-feather="mail"></i> <span>Messagerie</span></a>
+                        </li>
+                        <li class="menu-title"><span>Gestion Comptes</span></li>
+                        <li>
+                            <a href="{% url 'gestion_administrateurs' %}"><i data-feather="lock"></i> <span> Administrateurs </span></a>
+                        </li>
+                        <li class="active">
+                            <a><i data-feather="users"></i>
+                                <span>Patients</span></a>
+                        </li>
+                        <li>
+                            <a href="{% url 'gestion_pediatre' %}"><i data-feather="clipboard"></i><span>Pédiatres</span></a>
+                        </li>
+
+
+                        <li class="menu-title">
+                            <span>Gestion media</span>
+                        </li>
+                        <li>
+                        <a href="#"><i data-feather="video"></i> <span>Videos</span><span
+                                class="menu-arrow"></span></a>
+                        <ul>
+                            <li><a href="{% url 'affichage_video' %}">Toutes les videos</a></li>
+                            <li><a href="{% url 'ajout_video' %}">Ajouter une video</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#"><i data-feather="image"></i> <span>Images</span><span
+                                class="menu-arrow"></span></a>
+                        <ul>
+                            <li><a href="{% url 'affichage_image' %}">Toutes les images</a></li>
+                            <li><a href="{% url 'ajout_image' %}">Ajouter une image</a></li>
+                        </ul>
+                    </li>
+                        <li class="menu-title">
+                            <span>Autre</span>
+                        </li>
+                        <li>
+                            <a href="{% url 'parametres' %}"><i data-feather="phone"></i> <span>Contact</span></a>
+                        </li>
+                    </ul>
 {% endblock %}
 
 {% block contenu %}
@@ -130,7 +138,7 @@
                                                 types: {
                                                     'obesite poids': 'line',
                                                     'obesite taille': 'line',
-                                                    'imc': 'line'
+                                                    'IMC': 'line'
                                                 }
                                             },
                                             axis: {
@@ -141,11 +149,59 @@
                                                     }
                                                 },
                                                 y: {
-                                                    label: 'Value'
+                                                    label: 'Valeur'
                                                 }
                                             }
                                         });
                                     });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Courbe de scolarité</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="chart_scolarite"></div>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.15.1/d3.min.js"></script>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.js"></script>
+                            <script>
+                                var chart = c3.generate({
+                                    bindto: '#chart_scolarite',
+                                    data: {
+                                        x: 'x',
+                                        columns: [
+                                            ['x', ...{{ chart_data_year_json|safe }}],
+                                            ['Scolarisation', ...{{ chart_data_class_json|safe }}] // Updated data values for data1
+                                        ],
+                                        type: 'line',
+                                        colors: {
+                                            Scolarisation: '#5115c7' // Set color for the line
+                                        }
+                                    },
+                                    axis: {
+                                        x: {
+                                            label: 'Year'
+                                        },
+                                        y: {
+                                            label: 'Grade',
+                                            tick: {
+                                                format: function (d) {
+                                                    var grades = ['CP', 'CE1', 'CE2', 'CM1', 'CM2', '6ème', '1ère année', '2ème année', '3ème année', '4ème année', '5ème année', 'BAC'];
+                                                    var index = d < grades.length ? d : 0;
+                                                    return grades[index];
+                                                },
+                                                values: [0, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 10, 11]
+                                            }
+                                        }
+                                    }
+                                });
+
+
                             </script>
                         </div>
                     </div>

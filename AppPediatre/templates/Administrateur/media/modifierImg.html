@@ -2,20 +2,14 @@
 {% load static %}
 
 {% block sideBar %}
+
 <ul>
     <li class="menu-title"><span>Menu</span></li>
     <li>
         <a href="{% url 'index_admin' %}"><i data-feather="home"></i> <span>tableau de bord</span></a>
     </li>
-    <li class="submenu">
-        <a href="#"><i data-feather="pie-chart"></i> <span> Statistiques</span> <span
-                class="menu-arrow"></span></a>
-        <ul>
-            <li><a href="sales-report.html">Sales Report</a></li>
-            <li><a href="expenses-report.html">Expenses Report</a></li>
-            <li><a href="profit-loss-report.html">Profit & Loss Report</a></li>
-            <li><a href="taxs-report.html">Taxs Report</a></li>
-        </ul>
+    <li>
+        <a href="{% url 'statistiques' %}"><i data-feather="pie-chart"></i> <span> Statistiques</span></a>
     </li>
     <li>
         <a href="#"><i data-feather="bell"></i> <span>Actualités</span><span
@@ -26,22 +20,17 @@
         </ul>
     </li>
     <li>
-        <a href="#"><i data-feather="mail"></i> <span>Messagerie</span></a>
+        <a href="{% url 'chatAdmin' %}"><i data-feather="mail"></i> <span>Messagerie</span></a>
     </li>
     <li class="menu-title"><span>Gestion Comptes</span></li>
     <li>
-        <a href="#"><i data-feather="lock"></i> <span> Administrateurs </span></a>
+        <a href="{% url 'gestion_administrateurs' %}"><i data-feather="lock"></i> <span> Administrateurs </span></a>
     </li>
     <li>
         <a href="{% url 'gestion_patients' %}"><i data-feather="users"></i> <span>Patients</span></a>
     </li>
-    <li class="submenu">
-        <a href="#"><i data-feather="clipboard"></i> <span> Spécialistes</span> <span
-                class="menu-arrow"></span></a>
-        <ul>
-            <li><a href="">Pediatre</a></li>
-            <li><a href="">Dentiste</a></li>
-        </ul>
+    <li>
+        <a href="{% url 'gestion_pediatre' %}"><i data-feather="clipboard"></i><span>Pédiatres</span></a>
     </li>
 
     <li class="menu-title">
@@ -64,13 +53,10 @@
         </ul>
     </li>
     <li class="menu-title">
-        <span>Réglages</span>
+        <span>Autre</span>
     </li>
     <li>
-        <a href="profile.html"><i data-feather="user-plus"></i> <span>Profile</span></a>
-    </li>
-    <li>
-        <a href="settings.html"><i data-feather="settings"></i> <span>Paramètres</span></a>
+        <a href="{% url 'parametres' %}"><i data-feather="phone"></i> <span>Contact</span></a>
     </li>
 </ul>
 {% endblock %}

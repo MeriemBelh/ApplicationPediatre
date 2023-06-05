@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, AbstractBaseUser, BaseUserManager
 from django.utils import timezone
 
-
 class UserManager(BaseUserManager):
     def create_user(self, username, email=None, password=None, **extra_fields):
         if not username:
@@ -41,13 +40,12 @@ class User(AbstractUser):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
 
-    def __str__(self):
+    def _str_(self):
         return self.username
-
 
 class Pediatre(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    # idPediatre = models.AutoField(default=timezone.now)
+    #idPediatre = models.AutoField(default=timezone.now)
     inpe = models.IntegerField(unique=True)
     cniPediatre = models.CharField(max_length=8)
     nomPediatre = models.CharField(max_length=60)

@@ -25,6 +25,53 @@
 </a>
 {% endblock logo%}
 {% block nav%}
+{% if user.is_authenticated %}
+<nav class="nav">
+    <ul class="nav__list">
+        <li class="nav__item">
+            <a class="bttn" href="{% url 'homPage' %}">Accueil</a>
+        </li>
+        <li class="nav__item">
+            <a class="bttn" href="{% url 'image' %}">Media</a>
+        </li>
+        <li class="nav__item">
+            <a class="bttn" id="focus">Actualités</a>
+        </li>
+        <!-- Dossier -->
+        <li class="nav__item">
+            <a class="bttn" href="{% url 'info_patient' %}">Consulter Dossier</a>
+        </li>
+        <li class="nav__item">
+            <div class="action">
+                <div class="profile" onclick="menuToggle();">
+                    {% if imgPatient %}
+                    <img src="{{imgPatient}}" alt="">
+                    {% else %}
+                    <img src="{% static 'images/Patient/user.jpg' %}" alt="">
+                    {% endif %}
+                </div>
+
+                <div class="menu">
+                    <h3>
+                        {{patient.nomPatient}} {{patient.prenomPatient}}
+                        <div>
+                            {{patient.mailPatient}}
+                        </div>
+                    </h3>
+                    <ul>
+                        <li>
+                            <a href="{% url 'profile' %}">modifier le compte</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'logout_patient' %}">Se deconnecter</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </li>
+    </ul>
+</nav>
+{% else %}
 <nav class="nav">
     <ul class="nav__list">
         <li class="nav__item">
@@ -44,6 +91,7 @@
         </li>
     </ul>
 </nav>
+{% endif %}
 {% endblock nav%}
 {% block section%}{% endblock section%}
 

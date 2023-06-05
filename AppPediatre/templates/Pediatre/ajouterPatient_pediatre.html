@@ -212,7 +212,7 @@
                                     <div class="form-holder">
                                         <label for="date_naissance">Date de naissance *</label>
                                         <input type="date" class="form-control" id="datePickerId" name="datenaissance"
-                                               required>
+                                        required>
                                     </div>
                                     <div class="form-holder">
                                         <label for="sexe">Sexe *</label>
@@ -258,7 +258,7 @@
                                     <div class="form-holder">
                                         <label for="delegation">Région *</label>
                                         <select name="delegation" id="delegation" class="form-control" required>
-                                            <option selected disabled>Choisir...</option>
+                                            <option disabled selected>Choisir...</option>
                                             {% for d in delegations %}
                                                 <option value="{{ d }}">{{ d }}</option>
                                             {% endfor %}
@@ -266,7 +266,7 @@
                                     </div>
                                     <div class="form-holder">
                                         <label for="ville">Ville *</label>
-                                        <select name="ville" id="ville" class="form-control required">
+                                        <select name="ville" id="ville" class="form-control" required>
                                             <option selected disabled>Choisir...</option>
                                             <optgroup label="Tanger - Tétouan - Al Hoceima">
                                                 <option value="Tanger">Tanger</option>
@@ -448,8 +448,8 @@
                                     <div class="form-holder form-holder-2" id="listeDesMutuelles" style="display:none;">
                                         <label for="typeMutuelle">Mutuelle *</label>
                                         <select class="form-control" id="typeMutuelle" name="nomCouvertureMedical"
-                                                required>
-                                            <option value="" selected disabled>Choisir...</option>
+                                        required>
+                                            <option value="" selected>Choisir...</option>
                                             {% for m in mutuelles %}
                                                 <option value="{{ m }}">{{ m }}</option>
                                             {% endfor %}
@@ -520,8 +520,8 @@
                                 <div class="form-row">
                                     <div class="form-holder form-holder-2">
                                         <label for="GS">Grossesse suivi</label>
-                                        <select name="grossesse_suivi" id="GS" class="form-control">
-                                            <option value="" selected>Choisir...</option>
+                                        <select name="grossesse_suivi" id="GS" class="form-control" required>
+                                            <option value="" disabled selected>Choisir...</option>
                                             <option value="Oui">Oui</option>
                                             <option value="Non">Non</option>
                                         </select>
@@ -530,8 +530,8 @@
                                 <div class="form-row">
                                     <div class="form-holder form-holder-2">
                                         <label for="TG">Terme de la grossesse</label>
-                                        <select name="terme_grossesse" id="TG" class="form-control">
-                                            <option value="" selected>Choisir...</option>
+                                        <select name="terme_grossesse" id="TG" class="form-control" required>
+                                            <option value="" disabled selected>Choisir...</option>
                                             <option value="A terme">A terme</option>
                                             <option value="Prématuré">Prématuré</option>
                                         </select>
@@ -550,8 +550,8 @@
                                 <div class="form-row">
                                     <div class="form-holder form-holder-2">
                                         <label for="AV">Accouchement par voie</label>
-                                        <select name="accouchement_par_voie" id="AV" class="form-control">
-                                            <option value="" selected>Choisir...</option>
+                                        <select name="accouchement_par_voie" id="AV" class="form-control" required>
+                                            <option value="" disabled selected>Choisir...</option>
                                             <option value="Basse">Basse</option>
                                             <option value="Césarienne">Césarienne</option>
                                         </select>
@@ -561,7 +561,7 @@
                                     <div class="form-holder form-holder-2">
                                         <label for="SN">Souffrance Néonatale *</label>
                                         <select name="souffrance_neonatal" id="SN" class="form-control" required>
-                                            <option value="" selected disabled>Choisir...</option>
+                                            <option value="" disabled selected>Choisir...</option>
                                             <option value="Oui">Oui</option>
                                             <option value="Non">Non</option>
                                         </select>
@@ -571,7 +571,7 @@
                                     <div class="form-holder form-holder-2">
                                         <label for="PN">Poids de naissance (en Kg) *</label>
                                         <select name="poids_de_naissance" id="PN" class="form-control" required>
-                                            <option value="" selected disabled>Choisir...</option>
+                                            <option value="" disabled selected>Choisir...</option>
                                             <option value="< 2Kg">
                                                 < 2Kg
                                             </option>
@@ -592,8 +592,8 @@
                                     <div class="form-holder form-holder-2">
                                         <label for="NHA">Hospitalisation à l'âge Néonatal *</label>
                                         <select name="Notion_hospitalisation_age_neonatal" id="NHA" class="form-control"
-                                                required>
-                                            <option value="" selected disabled>Choisir...</option>
+                                        required>
+                                            <option value="" disabled selected>Choisir...</option>
                                             <option value="Oui">Oui</option>
                                             <option value="Non">Non</option>
                                         </select>
@@ -603,7 +603,7 @@
                                     <div class="form-holder form-holder-2">
                                         <label for="All">Allaitement *</label>
                                         <select name="allaitement" id="All" class="form-control" required>
-                                            <option value="" selected disabled>Choisir...</option>
+                                            <option value="" disabled selected>Choisir...</option>
                                             <option value="Maternel">Maternel</option>
                                             <option value="Mixte">Mixte</option>
                                             <option value="Artificiel">Artificiel</option>
@@ -621,7 +621,7 @@
                                     <div class="form-holder form-holder-2">
                                         <label for="RSP">Retentissement Staturo-Pondérale *</label>
                                         <select name="retentissement_staturo_ponderale" id="RSP" class="form-control"
-                                                required>
+                                        required>
                                             <option value="" disabled selected>Choisir...</option>
                                             <option value="Retard">Retard</option>
                                             <option value="Stagnation">Stagnation</option>
@@ -1669,7 +1669,7 @@
                                                            id="dyd">
                                                         <tr>
                                                             <td>
-                                                                <input name="classe_primaire[]" id="CPr[]" value="CP"
+                                                                <input name="classe_primaire[]" id="CPr" value="CP"
                                                                        placeholder="CP" class="form-control"
                                                                        style="width:90%; border: 2px solid #000;background: white;"/>
                                                             </td>
@@ -1715,20 +1715,52 @@
                                                             });
                                                             var c = 0;
                                                             var j = 1;
-                                                            console.log(tab);
+
+                                                            var dropdown = document.getElementById("yearpi");
+                                                            var selctedYearJ1 = dropdown.options[dropdown.selectedIndex].value;
+                                                            var selctedYearJ2 = dropdown.options[dropdown.selectedIndex].value;
+                                                            dropdown.addEventListener("change", function () {
+                                                                selctedYearJ2 = dropdown.options[dropdown.selectedIndex].value;
+                                                            });
+
+                                                            let y = new Date().getFullYear();
+                                                            let y1 = new Date().getFullYear() - 1;
+                                                            var this_year = y1 + "/" + y;
+
+                                                            var dropdownCrp;
+                                                            var selctedCpr;
+
                                                             $('#add3').click(function () {
-                                                                if ($('#yearpi' + (j - 1)).val() != '') {
+                                                                if ($('#yearpi' + (j - 1)).val() != '' && $('#yearpi' + (j - 1)).val() != this_year && selctedYearJ2 != this_year && document.getElementById("yearpi").options[dropdown.selectedIndex].value != this_year) {
                                                                     var optionsHtml = '';
-                                                                    for (i = 0; i < 6; i++) {
-                                                                        if (tab[i] == tab[c]) {
+                                                                    let is_classe_selected = false;
+                                                                    if (j == 1) {
+                                                                        let choice = 2;
+                                                                        optionsHtml = '';
+                                                                        for (i = 0; i < 6 && choice > 0; i++) {
+                                                                            choice = choice - 1 ;
                                                                             optionsHtml += '<option value="' + tab[i] + '" checked>' + tab[i] + '</option>';
-                                                                        } else {
-                                                                            optionsHtml += '<option value="' + tab[i] + '">' + tab[i] + '</option>';
+                                                                        }
+                                                                    } else {
+                                                                        let choice = 2;
+                                                                        let numC = j - 1;
+                                                                        dropdownCrp = document.getElementById("CPr" + numC);
+                                                                        selctedCpr = dropdownCrp.options[dropdownCrp.selectedIndex].value;
+                                                                        optionsHtml = '';
+                                                                        for (i = 0; i < 6; i++) {
+                                                                            if (selctedCpr == tab[i]) {
+                                                                                is_classe_selected = true;
+                                                                            }
+                                                                            if (is_classe_selected == true && choice > 0) {
+                                                                                choice = choice - 1 ;
+                                                                                optionsHtml += '<option value="' + tab[i] + '" checked>' + tab[i] + '</option>';
+                                                                            }
                                                                         }
                                                                     }
+
                                                                     $('#dyd').append('<tr id="roos' + j + '">' +
                                                                         '<td>' +
-                                                                        '<select  class="form-control" id="CPr[]" style="width:90%; border: 2px solid #000;background: white;"  name="classe_primaire[]">' + optionsHtml + '</select>' +
+                                                                        '<select  class="form-control" id="CPr' + j + '" style="width:90%; border: 2px solid #000;background: white;"  name="classe_primaire[]">' + optionsHtml + '</select>' +
                                                                         '</td>' +
                                                                         '<td>' +
                                                                         '<select id="yearpi' + j + '" class="form-control" style="width:90%; border: 2px solid #000;background: white;"  name="classe_primaire_year[]"></select>' +
@@ -1737,12 +1769,40 @@
                                                                         '<button type="button" name="remove" id="' + j + '" class="btn btn-danger btn_rem4"><i class="bx bx-x"></i></button>' +
                                                                         '</td>' +
                                                                         '</tr>');
+                                                                    // Regler la date
                                                                     let st = 1989;
                                                                     let en = new Date().getFullYear() - 1;
-                                                                    for (i = en; i > st; i--) {
-                                                                        let b = i + 1;
-                                                                        let f = i + '/' + b;
-                                                                        $("#yearpi" + j).append($('<option/>').val(i + "/" + b).html(i + "/" + b));
+                                                                    let is_date_selected = false;
+                                                                    let is_dateFirst_selected = false;
+
+                                                                    if (j == 1) {
+                                                                        dropdown = document.getElementById("yearpi");
+                                                                        selctedYearJ1 = dropdown.options[dropdown.selectedIndex].value;
+                                                                        for (i = en; i > st; i--) {
+                                                                            let b = i + 1;
+                                                                            let f = i + '/' + b;
+                                                                            if (f == selctedYearJ1) {
+                                                                                is_date_selected = true;
+                                                                                is_dateFirst_selected = true;
+                                                                            }
+                                                                            if (is_date_selected == false) {
+                                                                                $("#yearpi" + j).append($('<option/>').val(i + "/" + b).html(i + "/" + b).prop('selected', true));
+                                                                            }
+                                                                        }
+                                                                    } else {
+                                                                        let num = j - 1;
+                                                                        dropdown = document.getElementById("yearpi" + num);
+                                                                        selctedYearJ1 = dropdown.options[dropdown.selectedIndex].value;
+                                                                        for (i = en; i > st; i--) {
+                                                                            let b = i + 1;
+                                                                            let f = i + '/' + b;
+                                                                            if (f == selctedYearJ1) {
+                                                                                is_date_selected = true;
+                                                                            }
+                                                                            if (is_date_selected == false) {
+                                                                                $("#yearpi" + j).append($('<option/>').val(i + "/" + b).html(i + "/" + b).prop('selected', true));
+                                                                            }
+                                                                        }
                                                                     }
                                                                     j++;
                                                                     c++;
@@ -1755,13 +1815,11 @@
                                                                 for (i = button_id; i <= j; i++) {
                                                                     $('#roos' + i).remove();
                                                                 }
-                                                                j = w;
-                                                                c = w - 1;
+                                                                j = w + 1;
+                                                                c = w;
                                                             });
                                                         });
-
                                                     </script>
-
                                                     <script>
                                                         $('#CPri').change(function () {
                                                             $('#other11').toggle($('#CPri').is(':checked'));
@@ -1781,7 +1839,7 @@
                                                            id="ddy">
                                                         <tr>
                                                             <td>
-                                                                <input name="classe_secondaires[]" id="CPs[]"
+                                                                <input name="classe_secondaires[]" id="CPs"
                                                                        value="1ère année" placeholder="1ère année"
                                                                        class="form-control"
                                                                        style="width:100%; border: 2px solid #000;background: white;"/>
@@ -1815,21 +1873,51 @@
                                                         $(document).ready(function () {
                                                             var n = 1;
                                                             var d = 0;
+
+                                                            var dropdownyearS = document.getElementById("yearp");
+                                                            var selctedYearN1 = dropdownyearS.options[dropdownyearS.selectedIndex].value;
+                                                            var selctedYearN2 = dropdownyearS.options[dropdownyearS.selectedIndex].value;
+                                                            dropdownyearS.addEventListener("change", function () {
+                                                                selctedYearN2 = dropdownyearS.options[dropdownyearS.selectedIndex].value;
+                                                            });
+
+                                                            var dropdownCrs;
+                                                            var selctedCps;
+
+                                                            let y = new Date().getFullYear();
+                                                            let y1 = new Date().getFullYear() - 1;
+                                                            var this_year = y1 + "/" + y;
+
                                                             $('#add4').click(function () {
-                                                                if ($('#yearp[' + (n - 1) + ']').val() != '') {
-                                                                    n++;
+                                                                if ($('#yearp' + (n - 1)).val() != '' && $('#yearp' + (n - 1)).val() != this_year && selctedYearN2 != this_year && document.getElementById("yearp").options[dropdownyearS.selectedIndex].value != this_year) {
                                                                     var optionsHtml = '';
-                                                                    i = 0;
-                                                                    for (i = 0; i < 5; i++) {
-                                                                        if (ta[i] == ta[d]) {
+                                                                    let is_classe_selected = false;
+                                                                    if (n == 1) {
+                                                                        let choice = 2;
+                                                                        optionsHtml = '';
+                                                                        for (i = 0; i < 5 && choice > 0; i++) {
+                                                                            choice = choice - 1 ;
                                                                             optionsHtml += '<option value="' + ta[i] + '" checked>' + ta[i] + '</option>';
-                                                                        } else {
-                                                                            optionsHtml += '<option value="' + ta[i] + '">' + ta[i] + '</option>';
+                                                                        }
+                                                                    } else {
+                                                                        let numC = n - 1;
+                                                                        let choice = 2;
+                                                                        dropdownCrs = document.getElementById("CPs" + numC);
+                                                                        selctedCps = dropdownCrs.options[dropdownCrs.selectedIndex].value;
+                                                                        optionsHtml = '';
+                                                                        for (i = 0; i < 5; i++) {
+                                                                            if (selctedCps == ta[i]) {
+                                                                                is_classe_selected = true;
+                                                                            }
+                                                                            if (is_classe_selected == true && choice > 0) {
+                                                                                choice = choice - 1 ;
+                                                                                optionsHtml += '<option value="' + ta[i] + '" checked>' + ta[i] + '</option>';
+                                                                            }
                                                                         }
                                                                     }
                                                                     $('#ddy').append('<tr id="ros' + n + '">' +
                                                                         '<td>' +
-                                                                        '<select  class="form-control" id="CPs[]" style="width:100%; border: 2px solid #000;background: white;" name="classe_secondaires[]">' + optionsHtml + '</select>' +
+                                                                        '<select  class="form-control" id="CPs' + n + '" style="width:100%; border: 2px solid #000;background: white;" name="classe_secondaires[]">' + optionsHtml + '</select>' +
                                                                         '</td>' +
                                                                         '<td>' +
                                                                         '<select id="yearp' + n + '" class="form-control" style="width:100%; border: 2px solid #000;background: white;" name="classe_secondaire_years[]"></select>' +
@@ -1838,14 +1926,43 @@
                                                                         '<button type="button" name="remove" id="' + n + '" class="btn btn-danger btn_rem5"><i class="bx bx-x"></i></button>' +
                                                                         '</td>' +
                                                                         '</tr>');
+                                                                    // Regler la date
                                                                     let st = 1989;
                                                                     let en = new Date().getFullYear() - 1;
-                                                                    for (i = en; i > st; i--) {
-                                                                        let b = i + 1;
-                                                                        let f = i + '/' + b;
-                                                                        $("#yearp" + n + "").append($('<option/>').val(i + "/" + b).html(i + "/" + b));
+                                                                    let is_date_selected = false;
+                                                                    let is_dateFirst_selected = false;
+
+                                                                    if (n == 1) {
+                                                                        dropdownyearS = document.getElementById("yearp");
+                                                                        selctedYearN1 = dropdownyearS.options[dropdownyearS.selectedIndex].value;
+                                                                        for (i = en; i > st; i--) {
+                                                                            let b = i + 1;
+                                                                            let f = i + '/' + b;
+                                                                            if (f == selctedYearN1) {
+                                                                                is_date_selected = true;
+                                                                                is_dateFirst_selected = true;
+                                                                            }
+                                                                            if (is_date_selected == false) {
+                                                                                $("#yearp" + n).append($('<option/>').val(i + "/" + b).html(i + "/" + b).prop('selected', true));
+                                                                            }
+                                                                        }
+                                                                    } else {
+                                                                        let num = n - 1;
+                                                                        dropdown = document.getElementById("yearp" + num);
+                                                                        selctedYearN1 = dropdown.options[dropdown.selectedIndex].value;
+                                                                        for (i = en; i > st; i--) {
+                                                                            let b = i + 1;
+                                                                            let f = i + '/' + b;
+                                                                            if (f == selctedYearN1) {
+                                                                                is_date_selected = true;
+                                                                            }
+                                                                            if (is_date_selected == false) {
+                                                                                $("#yearp" + n).append($('<option/>').val(i + "/" + b).html(i + "/" + b).prop('selected', true));
+                                                                            }
+                                                                        }
                                                                     }
                                                                     d++;
+                                                                    n++;
                                                                 }
                                                             });
 
@@ -1855,8 +1972,8 @@
                                                                 for (i = button_id; i <= n; i++) {
                                                                     $('#ros' + i + '').remove();
                                                                 }
-                                                                n = y;
-                                                                d = y - 1;
+                                                                n = y + 1;
+                                                                d = y;
                                                             });
 
                                                         });
@@ -1931,20 +2048,65 @@
                                                     </table>
                                                     <script>
                                                         $(document).ready(function () {
+                                                            var dropdown = document.getElementById("yearpicker");
+                                                            var selctedYear = dropdown.options[dropdown.selectedIndex].value;
+                                                            dropdown.addEventListener("change", function () {
+                                                                selctedYear = dropdown.options[dropdown.selectedIndex].value;
+                                                            });
+
                                                             var q = 1;
+                                                            let this_year = new Date().getFullYear();
+
+                                                            let startYear = 1989;
+                                                            let endYear = new Date().getFullYear();
+
                                                             $('#add5').click(function () {
-                                                                q++;
-                                                                $('#ydd').append('<tr id="oo' + q + '"><td><select style="width:100%; border: 2px solid #000;background: white;" class="form-control" name="BAC[]" id="yearpicker' + q + '"></select></td><td><input type="text" style="width:100%; border: 2px solid #000;background: white;" class="form-control" placeholder="Filière" name="filiere[]" /></td><td style="width:10%;"><button type="button" name="remove" id="' + q + '" class="btn btn-danger btn_rem6"><i class="bx bx-x"></i></button></td></tr>');
-                                                                let startYear = 1989;
-                                                                let endYear = new Date().getFullYear();
-                                                                for (i = endYear; i > startYear; i--) {
-                                                                    $("#yearpicker" + q + "").append($('<option/>').val(i).html(i));
+                                                                if ($('#yearpicker').val() != this_year && $('#yearpicker' + (q - 1)).val() != '' && $('#yearpicker' + (q - 1)).val() != this_year) {
+
+
+                                                                    if (q == 1) {
+                                                                        var optionsHtml = '';
+                                                                        dropdown = document.getElementById("yearpicker");
+                                                                        selctedYear = dropdown.options[dropdown.selectedIndex].value;
+                                                                        var is_date_selected = true;
+                                                                        for (i = endYear; i > startYear; i--) {
+                                                                            if (is_date_selected == true) {
+                                                                                optionsHtml += '<option value="' + i + '" checked>' + i + '</option>';
+                                                                            }
+                                                                            if (i == selctedYear) {
+                                                                                is_date_selected = false;
+                                                                                console.log("Oui")
+                                                                            }
+                                                                        }
+                                                                    } else {
+                                                                        var optionsHtml = '';
+                                                                        let num = q - 1;
+                                                                        dropdown = document.getElementById("yearpicker" + num);
+                                                                        selctedYear = dropdown.options[dropdown.selectedIndex].value;
+                                                                        var is_date_selected = true;
+                                                                        for (i = endYear; i > startYear; i--) {
+                                                                            if (i == selctedYear) {
+                                                                                is_date_selected = false;
+                                                                            }
+                                                                            if (is_date_selected == true) {
+                                                                                optionsHtml += '<option value="' + i + '" checked>' + i + '</option>';
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    $('#ydd').append('<tr id="oo' + q + '">'+
+                                                                        '<td><select id="yearpicker' + q + '" style="width:100%; border: 2px solid #000;background: white;" class="form-control" name="BAC[]" >'+optionsHtml+'</select></td>'
+                                                                        +'<td><input type="text" style="width:100%; border: 2px solid #000;background: white;" class="form-control" placeholder="Filière" name="filiere[]" /></td>'
+                                                                        +'<td style="width:10%;">'
+                                                                        +'<button type="button" name="remove" id="' + q + '" class="btn btn-danger btn_rem6"><i class="bx bx-x"></i></button>'
+                                                                        +'</td></tr>');
+                                                                    q++;
                                                                 }
                                                             });
 
                                                             $(document).on('click', '.btn_rem6', function () {
                                                                 var button_id = $(this).attr("id");
                                                                 $('#oo' + button_id + '').remove();
+                                                                q = button_id - 1;
                                                             });
                                                         });
                                                     </script>

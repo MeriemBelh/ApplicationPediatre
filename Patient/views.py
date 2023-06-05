@@ -30,6 +30,7 @@ User = get_user_model()
 
 def home_patient(request):
     if request.user.is_authenticated:
+        contact_info = ContactInformation.objects.first()
         try:
             patient = Patient.objects.get(user=request.user)
         except Exception as e:
@@ -42,6 +43,7 @@ def home_patient(request):
             'patient': patient,
             'imgPatient': img_path,
             'actualite': actualite,
+            "contact_info": contact_info,
         }
         return render(request, 'Patient/homeUser.html', context)
     else:
@@ -110,6 +112,7 @@ def password_success(request):
 
 def infos_patient(request):
     if request.user.is_authenticated:
+        contact_info = ContactInformation.objects.first()
         try:
             patient = Patient.objects.get(user=request.user)
             info = InfoPatient.objects.get(patient=patient)
@@ -122,6 +125,7 @@ def infos_patient(request):
             'patient': patient,
             'imgPatient': img_path,
             'info': info,
+            "contact_info": contact_info,
         }
         return render(request, 'Patient/infosPatient.html', context)
     else:

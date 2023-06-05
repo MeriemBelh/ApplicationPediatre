@@ -3,7 +3,8 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    #path('test/', include('testExample.urls')),
+    path('chart/', views.chart_view, name='chart'),
+    # path('test/', include('testExample.urls')),
     path('', views.testIndex, name='testIndex'),
     path('selectAJAX/', views.selectAJAX, name='selectAJAX'),
     path('selectAJAX_view/', views.selectAJAX_view, name='selectAJAX_view'),
