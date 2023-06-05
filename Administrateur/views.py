@@ -1689,7 +1689,7 @@ def siteParams(request):
             else:
                 ContactInformation.objects.create(phone_number=phone_number, email_address=email_address)
             return render(request, "Administrateur/paramSite.html", {
-                "success_message": "Contact information updated successfully.",
+                "success_message": "Coordonnées mises à jour avec succès.",
                 "contact_info": contact_info,
             })
         else:
