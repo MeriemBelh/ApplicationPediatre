@@ -23,7 +23,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'Uploads/')
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-u60fmtdj%94w)-)&iji(u&o1i=(#r(o817+n8m0ekf*3w*w%lu'
+SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -80,27 +80,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'AppPediatre.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'dbpediatre',
-#         'USER': 'root',
-#         'PASSWORD': 'root',
-#         'HOST': 'localhost',
-#         'PORT': '3306',
-#     }
-# }
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'dbpediatre',
         'USER': 'dbpediatre_user',
-        'PASSWORD': '2d9PmVfcgX6pfwMHmO8Sa77fdKDb2vYM',
-        'HOST': 'dpg-chruj0grddl7atfg00c0-a.oregon-postgres.render.com',
+        'PASSWORD': '',
+        'HOST': '',
         'PORT': '',
     }
 }
